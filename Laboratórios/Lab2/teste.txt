@@ -1,0 +1,6 @@
+5
+PUSH agua
+POP
+PUSH bola
+PUSH casa
+POP
