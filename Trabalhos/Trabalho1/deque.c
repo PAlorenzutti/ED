@@ -1,5 +1,4 @@
 #include "deque.h"
-#include "vector.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -65,11 +64,6 @@ void deque_push_front(Deque *f, int item) {
 }
 
 int deque_pop_back(Deque *f) {
-    if (f->size == 0) {
-        printf("Deque vazio!\n");
-        exit(1);
-    }
-
     // Ajusta o índice do final
     f->end = (f->end - 1 + f->allocated) % f->allocated;
     int item = f->v[f->end];
@@ -78,16 +72,15 @@ int deque_pop_back(Deque *f) {
 }
 
 int deque_pop_front(Deque *f) {
-    if (f->size == 0) {
-        printf("Deque vazio!\n");
-        exit(1);
-    }
-
     // Remove o item do início e ajusta o índice
     int item = f->v[f->start];
     f->start = (f->start + 1) % f->allocated;
     f->size--;
     return item;
+}
+
+int deque_get(Deque *f, int idx){
+    return f->v[(f->start + idx) % f->allocated];
 }
 
 void deque_destroy(Deque *f) {

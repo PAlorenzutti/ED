@@ -19,6 +19,14 @@ void perform_operation(Deque *f){
         deque_push_front(f, item);
     }
 
+    if(!strcmp(operacao, "GET")){
+        int idx;
+        scanf(" %d\n", &idx);
+        int data = deque_get(f, idx);
+
+        printf("%d\n", data);
+    }
+
     if(!strcmp(operacao, "POP_BACK")){
         int data = deque_pop_back(f);
 
