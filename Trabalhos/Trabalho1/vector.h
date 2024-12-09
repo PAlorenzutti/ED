@@ -1,6 +1,9 @@
 #ifndef _ED_VECTOR_H_
 #define _ED_VECTOR_H_
 
+#define VECTOR_INIT_SIZE 10
+#define VECTOR_INCREASE_FACTOR 2
+
 typedef void* data_type;
 
 typedef struct vector Vector;
@@ -16,6 +19,9 @@ void vector_push_back(Vector *v, data_type val);
 
 // Retorna o número de elementos atualmente no vector.
 int vector_size(Vector *v);
+
+//retorna o tamanho alocado;
+int vector_allocated(Vector *v);
 
 // Retorna o i-ésimo elemento do vector.
 data_type vector_get(Vector *v, int i);

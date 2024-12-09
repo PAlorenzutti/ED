@@ -3,9 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define VECTOR_INIT_SIZE 10
-#define VECTOR_INCREASE_FACTOR 2
-
 struct vector{
   data_type *data; //void** data
   int size;
@@ -39,6 +36,10 @@ void vector_push_back(Vector *v, data_type val){
 
 int vector_size(Vector *v){
   return v->size;
+}
+
+int vector_allocated(Vector *v){
+  return v->allocated;
 }
 
 data_type vector_get(Vector *v, int i){

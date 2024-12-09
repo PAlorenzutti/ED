@@ -1,47 +1,46 @@
-#include "vector.h"
-#include "priority_queue_vector.h"
-#include "process.h"
+#include "deque.h"
 
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-void perform_read(PriorityQueue *pq){
-    char *name = (char*)malloc(sizeof(char) * MAX_NAME_LENGTH);
-    char *category = (char*)malloc(sizeof(char) * MAX_NAME_LENGTH);
-    int id;
-    int priority;
+void perform_operation(Deque *f){
+    char operacao[32];
+    scanf("%s", operacao);
 
-    scanf("%s %s %d %d\n", name, category, &id, &priority);
-    
-    Process *p = process_constructor(name, category, id, priority);
+    if(!strcmp(operacao, "PUSH_BACK")){
+        int item;
+        scanf(" %d\n", &item);
+        deque_push_back(f, item);
+    }
 
-    pq_push(pq, p);
-}
+    if(!strcmp(operacao, "PUSH_FRONT")){
+        int item;
+        scanf(" %d\n", &item);
+        deque_push_front(f, item);
+    }
 
-void perform_processes(PriorityQueue *pq, int n){
-    for(int i = 0; i < n; i++){
-        data_type data = pq_pop(pq);
-        
-        Process *p = (Process*) data;
+    if(!strcmp(operacao, "POP_BACK")){
+        int data = deque_pop_back(f);
 
-        printf("%s %s %d %d\n", process_get_name(p), process_get_category(p), process_get_id(p), process_get_priority(p));
+        printf("%d\n", data);
+    }
 
-        process_destructor(p);
+    if(!strcmp(operacao, "POP_FRONT")){
+        int data = deque_pop_front(f);
+
+        printf("%d\n", data);
     }
 }
 
 int main(){
-    PriorityQueue *pq = pq_constructor(process_compare_priority);
+    Deque *f = deque_construct();
+    
+    int N;
+    scanf("%d", &N);
 
-    int n;
-    scanf("%d\n", &n);
-
-    for(int i = 0; i < n; i++){
-        perform_read(pq);
+    for(int i = 0; i < N; i++){
+        perform_operation(f);
     }
 
-    perform_processes(pq, n);
-
-    pq_destroy(pq);
+    deque_destroy(f);
 }
