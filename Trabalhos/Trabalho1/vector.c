@@ -38,10 +38,6 @@ int vector_size(Vector *v){
   return v->size;
 }
 
-int vector_allocated(Vector *v){
-  return v->allocated;
-}
-
 data_type vector_get(Vector *v, int i){
   if(!(i < v->size) || !(i > -1)){
     printf("Erro!\n");

@@ -1,6 +1,7 @@
 #include "deque.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void perform_operation(Deque *f){
@@ -8,35 +9,39 @@ void perform_operation(Deque *f){
     scanf("%s", operacao);
 
     if(!strcmp(operacao, "PUSH_BACK")){
-        int item;
-        scanf(" %d\n", &item);
+        int *item = (int*)malloc(sizeof(int));
+        scanf(" %d\n", item);
         deque_push_back(f, item);
     }
 
     if(!strcmp(operacao, "PUSH_FRONT")){
-        int item;
-        scanf(" %d\n", &item);
+        int *item = (int*)malloc(sizeof(int));
+        scanf(" %d\n", item);
         deque_push_front(f, item);
     }
 
     if(!strcmp(operacao, "GET")){
         int idx;
         scanf(" %d\n", &idx);
-        int data = deque_get(f, idx);
+        data_type data = deque_get(f, idx);
 
-        printf("%d\n", data);
+        printf("%d\n", *(int*)data);
     }
 
     if(!strcmp(operacao, "POP_BACK")){
-        int data = deque_pop_back(f);
+        data_type data = deque_pop_back(f);
 
-        printf("%d\n", data);
+        printf("%d\n", *(int*)data);
+
+        free(data);
     }
 
     if(!strcmp(operacao, "POP_FRONT")){
-        int data = deque_pop_front(f);
+        data_type data = deque_pop_front(f);
 
-        printf("%d\n", data);
+        printf("%d\n", *(int*)data);
+
+        free(data);
     }
 }
 

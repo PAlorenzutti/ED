@@ -20,9 +20,6 @@ void vector_push_back(Vector *v, data_type val);
 // Retorna o número de elementos atualmente no vector.
 int vector_size(Vector *v);
 
-//retorna o tamanho alocado;
-int vector_allocated(Vector *v);
-
 // Retorna o i-ésimo elemento do vector.
 data_type vector_get(Vector *v, int i);
 

@@ -7,7 +7,7 @@ teste:
 	./main <teste.txt >saida.txt
 
 valgrind:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./main <teste.txt
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./main <teste.txt
 
 clean:
 	rm -f main saida.txt
