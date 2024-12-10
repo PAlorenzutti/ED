@@ -8,6 +8,7 @@ struct Process{
     char category[MAX_NAME_LENGTH];
     int id;
     int priority;
+    int iteracao;
 };
 
 Process *process_constructor(char *name, char *category, int id, int priority){
@@ -21,6 +22,7 @@ Process *process_constructor(char *name, char *category, int id, int priority){
 
     p->id = id;
     p->priority = priority;
+    p->iteracao = -1;
 
     return p;
 }

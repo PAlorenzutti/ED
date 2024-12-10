@@ -1,59 +1,44 @@
-#include "deque.h"
+#include "heap.h"
+#include "process.h"
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
-void perform_operation(Deque *f){
-    char operacao[32];
-    scanf("%s", operacao);
+void perform_read(Heap *heap){
+    char name[32];
+    char category[32];
+    int id;
+    int priority;
 
-    if(!strcmp(operacao, "PUSH_BACK")){
-        int *item = (int*)malloc(sizeof(int));
-        scanf(" %d\n", item);
-        deque_push_back(f, item);
-    }
+    scanf("%s %s %d %d\n", name, category, &id, &priority);
+    
+    Process *p = process_constructor(name, category, id, priority);
 
-    if(!strcmp(operacao, "PUSH_FRONT")){
-        int *item = (int*)malloc(sizeof(int));
-        scanf(" %d\n", item);
-        deque_push_front(f, item);
-    }
+    heap_push(heap, p);
+}
 
-    if(!strcmp(operacao, "GET")){
-        int idx;
-        scanf(" %d\n", &idx);
-        data_type data = deque_get(f, idx);
+void perform_processes(Heap *heap, int n){
+    for(int i = 0; i < n; i++){
+        data_type data = heap_get(heap, i);
+        
+        Process *p = (Process*) data;
 
-        printf("%d\n", *(int*)data);
-    }
-
-    if(!strcmp(operacao, "POP_BACK")){
-        data_type data = deque_pop_back(f);
-
-        printf("%d\n", *(int*)data);
-
-        free(data);
-    }
-
-    if(!strcmp(operacao, "POP_FRONT")){
-        data_type data = deque_pop_front(f);
-
-        printf("%d\n", *(int*)data);
-
-        free(data);
+        printf("%s %s %d %d\n", process_get_name(p), process_get_category(p), process_get_id(p), process_get_priority(p));
     }
 }
 
 int main(){
-    Deque *f = deque_construct();
-    
-    int N;
-    scanf("%d", &N);
+    Heap* heap = heap_constructor(process_compare_priority);
 
-    for(int i = 0; i < N; i++){
-        perform_operation(f);
+    int n;
+    scanf("%d\n", &n);
+
+    for(int i = 0; i < n; i++){
+        perform_read(heap);
     }
 
-    deque_destroy(f);
+    perform_processes(heap, n);
+
+    heap_destroy(heap);
 }
