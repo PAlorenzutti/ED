@@ -17,6 +17,8 @@ data_type deque_pop_front(Deque *f);
 
 data_type deque_get(Deque *f, int idx);
 
+int deque_size(Deque *f);
+
 void deque_destroy(Deque *f);
 
 #endif

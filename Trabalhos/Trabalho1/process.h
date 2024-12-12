@@ -5,17 +5,25 @@
 
 typedef struct Process Process;
 
-Process *process_constructor(char *name, char *category, int id, int priority);
+Process *process_constructor(char *nome, char *tipo, int prioridade, int carga, int iteracao_inicio);
 
-int process_compare_priority(const void *process1, const void *process2);
+char* process_get_nome(Process *p);
 
-char* process_get_name(Process *p);
+char* process_get_tipo(Process *p);
 
-char* process_get_category(Process *p);
+int process_get_prioridade(Process *p);
 
-int process_get_id(Process *p);
+int process_get_carga(Process *p);
 
-int process_get_priority(Process *p);
+int process_get_iteracao(Process *p);
+
+void process_run(Process *p, int iteracao);
+
+int process_compare_SO(const void *process1, const void *process2);
+
+int process_compare_USER(const void *process1, const void *process2);
+
+void process_print(Process *p);
 
 void process_destructor(Process *p);
 

@@ -94,6 +94,10 @@ data_type deque_get(Deque *f, int idx){
     return f->v[(f->start + idx) % f->allocated];
 }
 
+int deque_size(Deque *f){
+    return f->size;
+}
+
 void deque_destroy(Deque *f) {
     for(int i = 0; i < f->size; i++){
         free(deque_pop_front(f));
