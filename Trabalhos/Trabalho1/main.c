@@ -79,6 +79,27 @@ void run_RT(Deque *RT, int iteracao){
     }
 }
 
+//roda tanto programa de SO, quanto de USER, pois são ambos heap;
+void run_SO_USER(Heap *heap, int iteracao){
+    //retira o processo com maior prioridade;
+    Process *p = (Process*) heap_pop(heap);
+
+    //decrementa a carga do processo e atualiza último uso;
+    process_run(p, iteracao);
+
+    //se a carga for igual a 0, printa o programa e destrói ele;
+    if(!process_get_carga(p)){
+        //printa o programa e a iteração atual;
+        printf("%s %d\n", process_get_nome(p), iteracao);
+
+        //libera o processo;
+        process_destructor(p);
+    }else{
+        //insere o programa novamente na heap;
+        heap_push(heap, p);
+    }
+}
+
 void perform_processes(Vector *programas){
     //filas para cada tipo de programa;
     Deque *RT = deque_construct();
@@ -111,8 +132,29 @@ void perform_processes(Vector *programas){
             continue;
         }
 
-        //muda a flag de acordo com o último programa executado;
+        //se for a vez de SO e tiver algum programa;
+        if(!strcmp(flag, "SO") && !heap_size(SO)){
+            //executa o processo de SO;
+            run_SO_USER(SO, iteracao);
 
+            //troca a flag para USER ser executado na próxima iteração
+            strcpy(flag, "USER");
+
+            iteracao++;
+            continue;
+        }
+
+        //se for a vez de USER e tiver algum programa;
+        if(!strcmp(flag, "USER") && !heap_size(USER)){
+            //executa o processo de USER;
+            run_SO_USER(USER, iteracao);
+
+            //troca a flag para SO ser executado na próxima iteração
+            strcpy(flag, "SO");
+
+            iteracao++;
+            continue;
+        }
     }
 
     //desaloca todas as filas;
