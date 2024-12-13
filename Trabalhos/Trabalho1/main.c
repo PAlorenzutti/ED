@@ -57,6 +57,51 @@ void search_programs(Vector *programas, Deque *RT, Heap *SO, Heap *USER, int ite
             }
         }
     }
+
+    //printa programas restantes dentro de vector;
+    printf("-------------------------------------------------------\n");
+    printf("Programas restantes no vector depois do search:\n\n");
+
+    for(int i = 0; i < vector_size(programas); i++){
+        Process *p = (Process*)vector_get(programas, i);
+
+        printf("%s %s %d %d %d | %d\n", process_get_nome(p), process_get_tipo(p), process_get_prioridade(p), process_get_carga(p), process_get_iteracao(p), process_get_ultimo_uso(p));
+    }
+
+    printf("-------------------------------------------------------\n");
+
+    //printa programas da fila de RT;
+    printf("-------------------------------------------------------\n");
+    printf("Programas no RT atualizado:\n\n");
+
+    for(int i = 0; i < deque_size(RT); i++){
+        Process *p = (Process*)deque_get(RT, i);
+
+        printf("%s %s %d %d %d | %d\n", process_get_nome(p), process_get_tipo(p), process_get_prioridade(p), process_get_carga(p), process_get_iteracao(p), process_get_ultimo_uso(p));    }
+
+    printf("-------------------------------------------------------\n");
+
+    //printa programas da fila de SO;
+    printf("-------------------------------------------------------\n");
+    printf("Programas no SO atualizado:\n\n");
+
+    for(int i = 0; i < heap_size(SO); i++){
+        Process *p = (Process*)heap_get(SO, i);
+
+        printf("%s %s %d %d %d | %d\n", process_get_nome(p), process_get_tipo(p), process_get_prioridade(p), process_get_carga(p), process_get_iteracao(p), process_get_ultimo_uso(p));    }
+
+    printf("-------------------------------------------------------\n");
+
+    //printa programas da fila de USER;
+    printf("-------------------------------------------------------\n");
+    printf("Programas no USER atualizado:\n\n");
+
+    for(int i = 0; i < heap_size(USER); i++){
+        Process *p = (Process*)heap_get(USER, i);
+
+        printf("%s %s %d %d %d | %d\n", process_get_nome(p), process_get_tipo(p), process_get_prioridade(p), process_get_carga(p), process_get_iteracao(p), process_get_ultimo_uso(p));    }
+
+    printf("-------------------------------------------------------\n");
 }
 
 void run_RT(Deque *RT, int iteracao){
@@ -106,6 +151,17 @@ void perform_processes(Vector *programas){
     Heap *SO = heap_constructor(process_compare_SO);
     Heap *USER = heap_constructor(process_compare_USER);
 
+    //printa o vetor de programas antes de iniciar o processador;
+    printf("-------------------------------------------------------\n");
+    printf("Programas inseridos no vector:\n\n");
+
+    for(int i = 0; i < vector_size(programas); i++){
+        Process *p = (Process*)vector_get(programas, i);
+
+        printf("%s %s %d %d %d | %d\n", process_get_nome(p), process_get_tipo(p), process_get_prioridade(p), process_get_carga(p), process_get_iteracao(p), process_get_ultimo_uso(p));    }
+
+    printf("-------------------------------------------------------\n");
+
     //inicia prioridade de programa como SO, caso RT esteja vazio;
     char flag[MAX_NAME_LENGTH] = "SO";
 
@@ -113,48 +169,57 @@ void perform_processes(Vector *programas){
     int iteracao = 0;
     
     while(true){
+        printf("\n\nIteração %d\n\n", iteracao);
+        
         //se o tamanho do vetor de programas for diferente de 0, busca programas que se iniciam na iteracao atual e os colocam nas respectivas filas (atualiza filas);
-        if(!vector_size(programas)){
+        if(vector_size(programas) > 0){
             search_programs(programas, RT, SO, USER, iteracao);
         }
 
+
         //se todas as filas estiverem vazias, sai;
-        if(!deque_size(RT) && !heap_size(SO) && !heap_size(USER)){
+        if(deque_size(RT) == 0 && heap_size(SO) == 0 && heap_size(USER) == 0){
             break;
         }
 
+        //flag de programa executado ou não;
+        int execute = 0;
+
         //se ainda tiver programas de RT, executa;
-        if(!deque_size(RT)){
+        if(deque_size(RT) > 0){
             //executa o processo de RT;
             run_RT(RT, iteracao);
 
-            iteracao++;
-            continue;
+            execute = 1;
         }
 
         //se for a vez de SO e tiver algum programa;
-        if(!strcmp(flag, "SO") && !heap_size(SO)){
+        if(strcmp(flag, "SO") == 0 && heap_size(SO) > 0 && execute == 0){
             //executa o processo de SO;
             run_SO_USER(SO, iteracao);
 
             //troca a flag para USER ser executado na próxima iteração
             strcpy(flag, "USER");
 
-            iteracao++;
-            continue;
+            execute = 1;
+        }
+
+        if(execute == 0){
+            strcpy(flag, "USER");
         }
 
         //se for a vez de USER e tiver algum programa;
-        if(!strcmp(flag, "USER") && !heap_size(USER)){
+        if(strcmp(flag, "USER") == 0 && heap_size(USER) > 0 && execute == 0){
             //executa o processo de USER;
             run_SO_USER(USER, iteracao);
 
             //troca a flag para SO ser executado na próxima iteração
             strcpy(flag, "SO");
 
-            iteracao++;
-            continue;
+            execute = 1;
         }
+
+        iteracao++;
     }
 
     //desaloca todas as filas;

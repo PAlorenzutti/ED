@@ -53,6 +53,10 @@ int heap_size(Heap *heap){
     return vector_size(heap->nodes);
 }
 
+data_type heap_get(Heap *heap, int idx){
+    return vector_get(heap->nodes, idx);
+}
+
 data_type heap_max(Heap *heap){
     //retorna o primeiro elemento do vetor, ou seja, a raiz (para caso de heap max);
     return vector_get(heap->nodes, 0);
@@ -111,10 +115,6 @@ void heap_heapify_down(Vector *nodes, int size, int idx, CmpFn cmp_fn){
 void heap_destroy(Heap *heap){
     vector_destroy(heap->nodes);
     free(heap);
-}
-
-data_type heap_get(Heap *heap, int idx){
-    return vector_get(heap->nodes, idx);
 }
 
 //heapificar vetor não ordenado com qualquer função de comparação

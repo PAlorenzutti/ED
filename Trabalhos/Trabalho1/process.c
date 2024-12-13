@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 struct Process{
     char nome[MAX_NAME_LENGTH];
@@ -49,9 +50,15 @@ int process_get_iteracao(Process *p){
     return p->iteracao_inicio;
 }
 
+int process_get_ultimo_uso(Process *p){
+    return p->ultimo_uso;
+}
+
 void process_run(Process *p, int iteracao){
     p->carga--;
     p->ultimo_uso = iteracao;
+
+    printf("Processo executado: %s %d %d\n\n", p->nome, p->carga, p->ultimo_uso);
 }
 
 int process_compare_SO(const void *process1, const void *process2){
@@ -68,11 +75,11 @@ int process_compare_SO(const void *process1, const void *process2){
     }
 
     //em segundo lugar, por ordem de carga (menor);
-    if(p1->carga < p2->carga){
+    if(p1->carga > p2->carga){
         return -1;
     }
 
-    if(p1->carga > p2->carga){
+    if(p1->carga < p2->carga){
         return 1;
     }
 
@@ -96,20 +103,21 @@ int process_compare_USER(const void *process1, const void *process2){
     }
 
     //em segundo lugar, por ordem de último uso (menor = mais tempo sem usar);
-    if(p1->ultimo_uso < p2->ultimo_uso){
+    if(p1->ultimo_uso > p2->ultimo_uso){
         return -1;
     }
 
-    if(p1->ultimo_uso > p2->ultimo_uso){
+    if(p1->ultimo_uso < p2->ultimo_uso){
         return 1;
     }
 
     //em terceiro lugar, por ordem alfabética (menor);
-    return strcmp(p1->nome, p2->nome);
+    return (-1) * strcmp(p1->nome, p2->nome);
 
     return 0;
 }
 
 void process_destructor(Process *p){
+    printf("Processo destruído: %s %d\n\n", p->nome, p->ultimo_uso);
     free(p);
 }

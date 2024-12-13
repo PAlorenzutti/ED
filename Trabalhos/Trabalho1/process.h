@@ -17,6 +17,8 @@ int process_get_carga(Process *p);
 
 int process_get_iteracao(Process *p);
 
+int process_get_ultimo_uso(Process *p);
+
 void process_run(Process *p, int iteracao);
 
 int process_compare_SO(const void *process1, const void *process2);

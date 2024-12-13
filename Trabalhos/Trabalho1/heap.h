@@ -19,6 +19,8 @@ int heap_empty(Heap *heap);
 
 int heap_size(Heap *heap);
 
+data_type heap_get(Heap *heap, int idx);
+
 data_type heap_max(Heap *heap);
 
 data_type heap_pop(Heap *heap); 

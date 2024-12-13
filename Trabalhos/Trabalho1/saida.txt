@@ -1,0 +1,209 @@
+-------------------------------------------------------
+Programas inseridos no vector:
+
+Chrome USER 0 3 0 | -1
+Word USER 0 2 0 | -1
+Memchk SO 0 2 0 | -1
+Procmap SO 0 1 0 | -1
+Viewmax RT 0 2 0 | -1
+ProMatrix RT 0 2 4 | -1
+-------------------------------------------------------
+
+
+Iteração 0
+
+-------------------------------------------------------
+Programas restantes no vector depois do search:
+
+ProMatrix RT 0 2 4 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no RT atualizado:
+
+Viewmax RT 0 2 0 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no SO atualizado:
+
+Procmap SO 0 1 0 | -1
+Memchk SO 0 2 0 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no USER atualizado:
+
+Chrome USER 0 3 0 | -1
+Word USER 0 2 0 | -1
+-------------------------------------------------------
+Processo executado: Viewmax 1 0
+
+
+
+Iteração 1
+
+-------------------------------------------------------
+Programas restantes no vector depois do search:
+
+ProMatrix RT 0 2 4 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no RT atualizado:
+
+Viewmax RT 0 1 0 | 0
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no SO atualizado:
+
+Procmap SO 0 1 0 | -1
+Memchk SO 0 2 0 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no USER atualizado:
+
+Chrome USER 0 3 0 | -1
+Word USER 0 2 0 | -1
+-------------------------------------------------------
+Processo executado: Viewmax 0 1
+
+Viewmax 1
+Processo destruído: Viewmax 1
+
+
+
+Iteração 2
+
+-------------------------------------------------------
+Programas restantes no vector depois do search:
+
+ProMatrix RT 0 2 4 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no RT atualizado:
+
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no SO atualizado:
+
+Procmap SO 0 1 0 | -1
+Memchk SO 0 2 0 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no USER atualizado:
+
+Chrome USER 0 3 0 | -1
+Word USER 0 2 0 | -1
+-------------------------------------------------------
+Processo executado: Procmap 0 2
+
+Procmap 2
+Processo destruído: Procmap 2
+
+
+
+Iteração 3
+
+-------------------------------------------------------
+Programas restantes no vector depois do search:
+
+ProMatrix RT 0 2 4 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no RT atualizado:
+
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no SO atualizado:
+
+Memchk SO 0 2 0 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no USER atualizado:
+
+Chrome USER 0 3 0 | -1
+Word USER 0 2 0 | -1
+-------------------------------------------------------
+Processo executado: Chrome 2 3
+
+
+
+Iteração 4
+
+-------------------------------------------------------
+Programas restantes no vector depois do search:
+
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no RT atualizado:
+
+ProMatrix RT 0 2 4 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no SO atualizado:
+
+Memchk SO 0 2 0 | -1
+-------------------------------------------------------
+-------------------------------------------------------
+Programas no USER atualizado:
+
+Word USER 0 2 0 | -1
+Chrome USER 0 2 0 | 3
+-------------------------------------------------------
+Processo executado: ProMatrix 1 4
+
+
+
+Iteração 5
+
+Processo executado: ProMatrix 0 5
+
+ProMatrix 5
+Processo destruído: ProMatrix 5
+
+
+
+Iteração 6
+
+Processo executado: Memchk 1 6
+
+
+
+Iteração 7
+
+Processo executado: Word 1 7
+
+
+
+Iteração 8
+
+Processo executado: Memchk 0 8
+
+Memchk 8
+Processo destruído: Memchk 8
+
+
+
+Iteração 9
+
+Processo executado: Chrome 1 9
+
+
+
+Iteração 10
+
+Processo executado: Word 0 10
+
+Word 10
+Processo destruído: Word 10
+
+
+
+Iteração 11
+
+Processo executado: Chrome 0 11
+
+Chrome 11
+Processo destruído: Chrome 11
+
+
+
+Iteração 12
+
