@@ -58,7 +58,7 @@ void process_run(Process *p, int iteracao){
     p->carga--;
     p->ultimo_uso = iteracao;
 
-    printf("Processo executado: %s %d %d\n\n", p->nome, p->carga, p->ultimo_uso);
+    // printf("Processo executado: %s %d %d\n\n", p->nome, p->carga, p->ultimo_uso);
 }
 
 int process_compare_SO(const void *process1, const void *process2){
@@ -84,7 +84,7 @@ int process_compare_SO(const void *process1, const void *process2){
     }
 
     //em terceiro lugar, por ordem alfabética (menor);
-    return strcmp(p1->nome, p2->nome);
+    return (-1) * strcmp(p1->nome, p2->nome);
 
     return 0;
 }
@@ -134,6 +134,6 @@ int process_compare_RT(const void *process1, const void *process2){
 }
 
 void process_destructor(Process *p){
-    printf("Processo destruído: %s %d\n\n", p->nome, p->ultimo_uso);
+    // printf("Processo destruído: %s %d\n\n", p->nome, p->ultimo_uso);
     free(p);
 }
