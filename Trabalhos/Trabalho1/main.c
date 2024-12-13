@@ -106,7 +106,7 @@ void search_programs(Vector *programas, Deque *RT, Heap *SO, Heap *USER, int ite
 
 void run_RT(Deque *RT, int iteracao){
     //retira o primeiro processo da fila;
-    Process *p = (Process*) deque_pop_back(RT);
+    Process *p = (Process*) deque_pop_front(RT);
 
     //decrementa a carga do processo e atualiza último uso;
     process_run(p, iteracao);
@@ -120,7 +120,7 @@ void run_RT(Deque *RT, int iteracao){
         process_destructor(p);
     }else{
         //insere novamente na fila, na primeira posição;
-        deque_push_front(RT, p);
+        deque_push_back(RT, p);
     }
 }
 

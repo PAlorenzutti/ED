@@ -25,6 +25,8 @@ int process_compare_SO(const void *process1, const void *process2);
 
 int process_compare_USER(const void *process1, const void *process2);
 
+int process_compare_RT(const void *process1, const void *process2);
+
 void process_print(Process *p);
 
 void process_destructor(Process *p);

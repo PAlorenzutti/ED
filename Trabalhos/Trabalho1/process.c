@@ -117,6 +117,22 @@ int process_compare_USER(const void *process1, const void *process2){
     return 0;
 }
 
+int process_compare_RT(const void *process1, const void *process2){
+    Process *p1 = (Process*) process1;
+    Process *p2 = (Process*) process2;
+
+    //compara somente a carga do processo;
+    if(p1->carga < p2->carga){
+        return -1;
+    }
+
+    if(p1->carga > p2->carga){
+        return 1;
+    }
+
+    return 0;
+}
+
 void process_destructor(Process *p){
     printf("Processo destruído: %s %d\n\n", p->nome, p->ultimo_uso);
     free(p);
