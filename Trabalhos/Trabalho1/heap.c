@@ -22,7 +22,7 @@ void heap_push(Heap *heap, data_type data){
     //insere ao final do vetor;
     vector_push_back(heap->nodes, data);
 
-    //heapify up para ordenar;
+    //heapify up para ordenara a partir do índice que acabou de ser inserido;
     heap_heapify_up(heap->nodes, heap_size(heap) - 1, heap->cmp_fn);
 }
 
@@ -119,7 +119,7 @@ void heap_destroy(Heap *heap){
 
 //heapificar vetor não ordenado com qualquer função de comparação
 void heap_sort(Vector *v, int cmp_fn(const void *, const void *)){
-    //algoritmo heapify vector
+    //algoritmo heapify vector com heapify down
     for(int i = (vector_size(v) / 2) - 1; i >= 0; i--){
         heap_heapify_down(v, vector_size(v), i, cmp_fn);
     }

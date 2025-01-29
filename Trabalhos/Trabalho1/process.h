@@ -1,7 +1,7 @@
 #ifndef _PROCESS_H_
 #define _PROCESS_H_
 
-#define MAX_NAME_LENGTH 32
+#define MAX_NAME_LENGTH 64
 
 typedef struct Process Process;
 
