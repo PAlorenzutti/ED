@@ -1,39 +1,61 @@
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "forward_list.h"
 
-void print_int(int data)
-{
-    printf("%d", data);
+void print_data(data_type data){
+// implemente a funcao para mostrar um elemento da lista na tela.
+    char *string = (char*)data;
+
+    printf("%s", string);
+}
+
+void destroy_data(data_type data){
+    char *string = (char*)data;
+
+    free(string);
 }
 
 int main()
 {
-    int n, m, val;
+    int num_instructions;
+    scanf("%d", &num_instructions);
 
-    ForwardList *l = forward_list_construct();
+    ForwardList *list = forward_list_construct();
 
-    scanf("%d", &n);
+    for (int i = 0; i < num_instructions; i++){
+        char command[20];
 
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%d", &val);
-        forward_list_push_front(l, val);
+        scanf("\n%s", command);
+
+        if (strcmp(command, "PUSH_FRONT") == 0)
+        {
+            // O que aconteceria aqui se trocássemos a alocação dinâmica por alocação estática? Faça o teste!
+            char *value = calloc(20, sizeof(char));
+            scanf("%s\n", value);
+
+            forward_list_push_front(list, value);
+        }else if (strcmp(command, "POP") == 0){
+            int idx;
+            scanf("%d", &idx);
+
+            void *val = forward_list_pop_index(list, idx);
+
+            // PARA FAZER: libere o elemento retornado pelo pop
+            if(val != NULL){
+                destroy_data(val);
+            }
+            
+        }
     }
 
-    scanf("%d", &m);
+    forward_list_print(list, print_data);
 
-    for(int i = 0; i < m; i++){
-        scanf("%d", &val);
-        forward_list_remove(l, val);
-    }
+    // PARA FAZER: a lista ainda pode ter elementos aqui. Libere-os.
 
-    //printa a lista
-    forward_list_print(l, print_int);
-
-    // test the destroy function
-    forward_list_destroy(l);
+    forward_list_destroy(list);
 
     return 0;
 }

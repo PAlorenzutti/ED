@@ -7,9 +7,19 @@
 typedef struct
 {
     Node *head;
+    Node *last;
     int size;
 } ForwardList;
 
+/**
+ * @brief Construct a new Linked List:: Linked List object
+ *  Allocates memory for a new linked list and returns a pointer to it.
+ * @return ForwardList*
+ * Pointer to the newly allocated linked list.
+ * @note
+ * The caller is responsible for freeing the memory allocated for the linked list using forward_list_destroy().
+ *
+ */
 ForwardList *forward_list_construct();
 
 /**
@@ -35,6 +45,17 @@ int forward_list_size(ForwardList *l);
 void forward_list_push_front(ForwardList *l, data_type data);
 
 /**
+ * @brief Pushes a new node to the back of the linked list.
+ *  Allocates memory for a new node and inserts it at the front of the linked list.
+ * @param l
+ * Pointer to the linked list.
+ * @param data
+ * Pointer to the data to be stored in the new node.
+ *
+ */
+void forward_list_push_back(ForwardList *l, data_type data);
+
+/**
  * @brief Print the elements of the linked list.
  *  Print the elements of the linked list.
  * @param l
@@ -43,6 +64,9 @@ void forward_list_push_front(ForwardList *l, data_type data);
  * Pointer to the function to print data_type values.
  *
  */
+
+data_type forward_list_pop_index(ForwardList *l, int index);
+
 void forward_list_print(ForwardList *l, void (*print_fn)(data_type));
 
 /**
@@ -123,6 +147,13 @@ void forward_list_cat(ForwardList *l, ForwardList *m);
  */
 void forward_list_sort(ForwardList *l);
 
+/**
+ * @brief Destroys the linked list.
+ *  Frees the memory allocated for the linked list and all its nodes.
+ * @param l
+ * Pointer to the linked list.
+ *
+ */
 void forward_list_destroy(ForwardList *l);
 
 #endif
