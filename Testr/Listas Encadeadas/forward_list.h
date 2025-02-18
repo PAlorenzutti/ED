@@ -145,7 +145,7 @@ void forward_list_cat(ForwardList *l, ForwardList *m);
  * @param l
  * Pointer to the linked list.
  */
-void forward_list_sort(ForwardList *l);
+void forward_list_sort(ForwardList *l, int (*comp_fn) (void*, void*));
 
 /**
  * @brief Destroys the linked list.

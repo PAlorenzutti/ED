@@ -47,7 +47,7 @@ void forward_list_print(ForwardList *l, void (*print_fn)(data_type)){
     //pega o endereço do primeiro nó (cabeça);
     Node *n = l->head;
 
-    printf("["); 
+    // printf("["); 
     
     while (n != NULL) {
         print_fn(n->value);
@@ -59,7 +59,7 @@ void forward_list_print(ForwardList *l, void (*print_fn)(data_type)){
         n = n->next;
     }
     
-    printf("]"); 
+    // printf("]"); 
 }
 
 data_type forward_list_get(ForwardList *l, int i){
@@ -75,6 +75,21 @@ data_type forward_list_get(ForwardList *l, int i){
     }
 
     return n->value;
+}
+
+Node* forward_list_get_node(ForwardList *l, int i){
+    if(i < 0 || i >= l->size){
+        printf("Error: forward_list_get");
+        exit(1);
+    }
+
+    Node *n = l->head;
+
+    for(int j = 0; n != NULL && j < i; j++){
+        n = node_next(n);
+    }
+
+    return n;
 }
 
 data_type forward_list_pop_front(ForwardList *l){
@@ -140,6 +155,36 @@ void forward_list_cat(ForwardList *l, ForwardList *m){
         forward_list_push_front(l, n->value);
 
         n = node_next(n);
+    }
+}
+
+int forward_list_compare_index(ForwardList *l, int i, int j, int (*comp_fn)(void *, void *)) {
+    Node *n1 = forward_list_get_node(l, i); // Alterado para get_node
+    Node *n2 = forward_list_get_node(l, j); // Alterado para get_node
+    return node_compare(n1, n2, comp_fn);
+}
+
+void forward_list_swap(ForwardList *l, int i, int j){
+    Node *n1 = forward_list_get_node(l, i);
+    Node *n2 = forward_list_get_node(l, j); // Índice j, não i
+
+    data_type temp = n1->value;
+    n1->value = n2->value;
+    n2->value = temp;
+}
+
+void forward_list_sort(ForwardList *l, int (*comp_fn) (void*, void*)){
+    for(int i = 0; i < l->size; i++){
+        int troca = 0;
+        for(int j = 0; j < l->size - 1 - i; j++){ 
+            if(forward_list_compare_index(l, j, j + 1, comp_fn) > 0){
+                forward_list_swap(l, j, j + 1); // Troca j e j+1
+                troca = 1;
+            }
+        }
+        if(troca == 0){
+            break;
+        }
     }
 }
 

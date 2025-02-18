@@ -19,6 +19,11 @@ Node* node_next(Node *node){
   return node->next;
 }
 
+int node_compare(Node *n1, Node *n2, int (*comp_fn) (void*, void*)){
+  return comp_fn(n1->value, n2->value);
+}
+
 void node_destroy(Node *node){
+  free(node->value);
   free(node);
 }

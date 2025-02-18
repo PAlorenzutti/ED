@@ -1,0 +1,7 @@
+6
+ENQUEUE unconscient
+ENQUEUE nonsuccession
+DEQUEUE
+DEQUEUE
+ENQUEUE secretaire
+DEQUEUE

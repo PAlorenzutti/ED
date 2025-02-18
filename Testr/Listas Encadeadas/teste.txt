@@ -1,25 +1,4 @@
-24
-PUSH_FRONT geração
-PUSH_FRONT futebol
-PUSH_FRONT hoje
-PUSH_FRONT fiscal
-PUSH_FRONT meio
-POP 1
-PUSH_FRONT tradicional
-PUSH_FRONT recente
-POP 1
-POP 4
-PUSH_FRONT prender
-POP 1
-PUSH_FRONT a
-POP 3
-POP 2
-PUSH_FRONT crescimento
-PUSH_FRONT relacionar
-PUSH_FRONT animal
-POP 4
-POP 6
-POP 1
-PUSH_FRONT lá
-PUSH_FRONT adequado
-POP 11
+3
+2
+3
+1
