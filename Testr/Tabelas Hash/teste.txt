@@ -1,8 +1,24 @@
-4
-filipe 32
-lucas 20
-joao 46
-filipe 33
-2
-lucas
-filipe
+15
+Isis 16
+Maite 49
+Nicole 18
+Mariah 37
+Perola 86
+Pietro 84
+Tomas 31
+Fernando 95
+Clara 36
+Lais 99
+Tomas 94
+Mariah 30
+Murilo 24
+Lais 42
+Pedro 22
+7
+Pietro
+Lais
+Murilo
+Mariah
+Pietro
+Pedro
+Clara

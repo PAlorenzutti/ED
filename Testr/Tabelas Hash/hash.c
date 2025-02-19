@@ -34,72 +34,87 @@ HashTableItem *hash_table_item_construct(void *key, void *val){
 
 }
 
+void hash_table_item_destroy(HashTableItem *item){
+    free(item->key);
+    free(item->val);
+    free(item);
+}
+
 void *hash_table_get(HashTable *h, void *key){
-    //pega a chave (índice) do balde onde vai ser pesquisado o item com a respectiva chave;
     int key_val = h->hash_fn(h, key);
 
-    //pega o nó que é a cabeça do balde;
-    Node *n = h->buckets[key_val]->head;
-
-    while(n != NULL){
-        //pega o par chave-valor armazenado na valor do nó;
-        HashTableItem *item  = (HashTableItem*)n->value;
-        
-        //compara a chave do item com a chave buscada;
-        if(!h->cmp_fn(item->key, key)){
-            return item;
-        }
-
-        //caso não tenha encontrado ainda, atualiza o nó para o próximo;
-        n = n->next;
+    //se o balde estiver vazio, retorna NULL;
+    if (h->buckets[key_val] == NULL){
+        return NULL;
     }
 
-    //caso não tenha encontrado
+    //pega a cabeça do balde;
+    Node *n = h->buckets[key_val]->head;
+
+    //itera sobre o balde;
+    while (n != NULL) {
+        HashTableItem *item = (HashTableItem *)n->value;
+
+        //se encontrar a chave, retorna o valor associado a ela;
+        if (h->cmp_fn(item->key, key) == 0) {
+            return item->val; // Retorna o valor em vez do item
+        }
+
+        n = n->next;
+    }
+    
+    //se não encontrou nada, retorna NULL;
     return NULL;
 }
 
-void *hash_table_set(HashTable *h, void *key, void *val){
-    //pega a chave (índice) do balde que vai receber o item;
+void *hash_table_set(HashTable *h, void *key, void *val) {
+    //pega a hash da chave;
     int key_val = h->hash_fn(h, key);
 
-    //se o balde estiver vazio, crie a lista e insere ele na cabeça da lista;
-    if(h->buckets[key_val] == NULL){
-        h->buckets[key_val] = forward_list_construct();
+    //verifica se o item existe;
+    HashTableItem *existing_item = hash_table_get(h, key);
 
-        //cria um item da tabela com chave e valor dados;   
-        HashTableItem *item = hash_table_item_construct(key, val);
+    //se o item existe, apenas atualiza;
+    if(existing_item != NULL){
+        //atualiza o item e retorna o item antigo;
+        void *old_val = existing_item->val;
+        existing_item->val = val;
 
-        forward_list_push_back(h->buckets[key_val], item);
-    }
-
-    //caso contrário, busca o item no balde
-    HashTableItem *item = hash_table_get(h, key);
-
-    //se o item já existir;
-    if(item != NULL){
-        //atualiza o valor do par e retorna o valor anterior;
-        void *val_prev = item->val;
-        item->val = val;
-
-        return val_prev;
+        return old_val;
     }else{
-        //insere o novo par ao final da lista do balde;
-        HashTableItem *new = hash_table_item_construct(key, val);
+        //se o balde estiver vazio, cria a lista dele;
+        if(h->buckets[key_val] == NULL){
+            h->buckets[key_val] = forward_list_construct();
+        }
 
-        forward_list_push_back(h->buckets[key_val], new);
+        //adiciona o novo item ao final da lista do balde;
+        HashTableItem *new_item = hash_table_item_construct(key, val);
+
+        forward_list_push_back(h->buckets[key_val], new_item);
+
+        h->n_elements++;
+
+        return NULL;
     }
-
-    return NULL;
 }
 
 int hash_table_size(HashTable *h){
     return h->table_size;
 }
 
-void hash_table_destroy(HashTable *h){
-    for(int i = 0; i < h->table_size; i++){
-        if(h->buckets[i] != NULL){
-            forward_list_destroy(h->buckets[i]);
+void hash_table_destroy(HashTable *h)
+{
+    for (int i = 0; i < h->table_size; i++){
+        if (h->buckets[i] != NULL){
+            Node *n = h->buckets[i]->head;
+
+            while (n != NULL){
+                HashTableItem *pair = n->value;
+                hash_table_item_destroy(pair);
+                n = n->next;
+            }
+
+            free(h->buckets[i]);
         }
     }
 
