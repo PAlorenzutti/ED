@@ -1,0 +1,8 @@
+4
+filipe 32
+lucas 20
+joao 46
+filipe 33
+2
+lucas
+filipe
