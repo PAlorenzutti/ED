@@ -24,6 +24,5 @@ int node_compare(Node *n1, Node *n2, int (*comp_fn) (void*, void*)){
 }
 
 void node_destroy(Node *node){
-  free(node->value);
   free(node);
 }

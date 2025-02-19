@@ -68,34 +68,39 @@ void *hash_table_get(HashTable *h, void *key){
 }
 
 void *hash_table_set(HashTable *h, void *key, void *val) {
-    //pega a hash da chave;
+    //Obtém a hash da chave
     int key_val = h->hash_fn(h, key);
 
-    //verifica se o item existe;
-    HashTableItem *existing_item = hash_table_get(h, key);
+    //Se o balde estiver vazio, cria a lista dele
+    if (h->buckets[key_val] == NULL) {
+        h->buckets[key_val] = forward_list_construct();
+    }
 
-    //se o item existe, apenas atualiza;
-    if(existing_item != NULL){
-        //atualiza o item e retorna o item antigo;
-        void *old_val = existing_item->val;
-        existing_item->val = val;
+    //Percorre a lista para verificar se a chave já existe
+    Node *n = h->buckets[key_val]->head;
 
-        return old_val;
-    }else{
-        //se o balde estiver vazio, cria a lista dele;
-        if(h->buckets[key_val] == NULL){
-            h->buckets[key_val] = forward_list_construct();
+    while (n != NULL) {
+        HashTableItem *item = (HashTableItem *)n->value;
+
+        if (h->cmp_fn(item->key, key) == 0) {
+            // A chave já existe, então atualiza o valor e retorna o valor antigo
+            void *old_val = item->val;
+            item->val = val;
+
+            return old_val;
         }
 
-        //adiciona o novo item ao final da lista do balde;
-        HashTableItem *new_item = hash_table_item_construct(key, val);
-
-        forward_list_push_back(h->buckets[key_val], new_item);
-
-        h->n_elements++;
-
-        return NULL;
+        n = n->next;
     }
+
+    // Se a chave não existe, adiciona um novo item
+    HashTableItem *new_item = hash_table_item_construct(key, val);
+
+    forward_list_push_back(h->buckets[key_val], new_item);
+
+    h->n_elements++;
+
+    return NULL;
 }
 
 int hash_table_size(HashTable *h){
@@ -114,7 +119,7 @@ void hash_table_destroy(HashTable *h)
                 n = n->next;
             }
 
-            free(h->buckets[i]);
+            forward_list_destroy(h->buckets[i]);
         }
     }
 
