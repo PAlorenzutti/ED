@@ -81,6 +81,8 @@ void forward_list_print(ForwardList *l, void (*print_fn)(data_type));
  */
 data_type forward_list_get(ForwardList *l, int i);
 
+Node* forward_list_get_node(ForwardList *l, int i);
+
 /**
  * @brief Remove the first node of the linked list and returns its data.
  * @param l
