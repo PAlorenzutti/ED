@@ -14,11 +14,3 @@ Mariah 30
 Murilo 24
 Lais 42
 Pedro 22
-7
-Pietro
-Lais
-Murilo
-Mariah
-Pietro
-Pedro
-Clara

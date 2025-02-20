@@ -99,7 +99,6 @@ data_type forward_list_pop_front(ForwardList *l){
 
     Node *prev = l->head;
 
-    // l->head = node_next(l->head);
     l->head = l->head->next;
 
     data_type value = prev->value;
@@ -253,4 +252,28 @@ void forward_list_destroy(ForwardList *l){
     }
 
     free(l);
+}
+
+ListIterator *list_iterator_construct(ForwardList *l){
+    ListIterator *it = (ListIterator*)malloc(sizeof(ListIterator));
+
+    it->current = l->head;
+
+    return it;
+}
+
+void list_iterator_destroy(ListIterator *it){
+    free(it);
+}
+
+data_type* list_iterator_next(ListIterator *it){
+    data_type *data = &(it->current->value);
+
+    it->current = it->current->next;
+
+    return data;
+}
+
+bool list_iterator_is_over(ListIterator *it){
+    return it->current == NULL;
 }

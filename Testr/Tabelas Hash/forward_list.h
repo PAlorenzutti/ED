@@ -3,6 +3,7 @@
 #define _FORWARD_forward_list_H_
 
 #include "node.h"
+#include <stdbool.h>
 
 typedef struct
 {
@@ -10,6 +11,10 @@ typedef struct
     Node *last;
     int size;
 } ForwardList;
+
+typedef struct ListIterator {
+    Node *current;
+} ListIterator;
 
 /**
  * @brief Construct a new Linked List:: Linked List object
@@ -80,8 +85,6 @@ void forward_list_print(ForwardList *l, void (*print_fn)(data_type));
  *
  */
 data_type forward_list_get(ForwardList *l, int i);
-
-Node* forward_list_get_node(ForwardList *l, int i);
 
 /**
  * @brief Remove the first node of the linked list and returns its data.
@@ -157,5 +160,38 @@ void forward_list_sort(ForwardList *l, int (*comp_fn) (void*, void*));
  *
  */
 void forward_list_destroy(ForwardList *l);
+
+/**
+ * @brief Returns an iterator to the first node of the linked list.
+ * @param l
+ * Pointer to the linked list.
+ * @return ListIterator*
+ * Pointer to the iterator.
+ */
+ListIterator *list_iterator_construct(ForwardList *l);
+
+/**
+ * @brief Free the memory allocated to the iterator.
+ * @param it
+ * Pointer to the iterator.
+ */
+void list_iterator_destroy(ListIterator *it);
+
+/**
+ * @brief Returns the data stored in the node and updates the iterator to point to the next node.
+ * @param it
+ * Pointer to the iterator.
+ * @return data_type
+ * Pointer to the data stored in the current node.
+ */
+data_type* list_iterator_next(ListIterator *it);
+
+/**
+ * @brief Returns true if the iterator is over.
+ * @param it
+ * Pointer to the iterator.
+ * @return 1 if the iterator is over, and 0 otherwise.
+ */
+bool list_iterator_is_over(ListIterator *it);
 
 #endif

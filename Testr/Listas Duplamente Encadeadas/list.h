@@ -4,8 +4,6 @@
 
 #include "node.h"
 
-typedef unsigned int bool;
-
 typedef struct
 {
     Node *head;
