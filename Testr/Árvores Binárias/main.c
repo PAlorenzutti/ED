@@ -41,6 +41,8 @@ int main()
         binary_tree_add(bt, new_int(val), new_int(val));
     }
 
+    binary_tree_print(bt);
+
     int m;
     scanf("%d", &m);
 
@@ -56,7 +58,7 @@ int main()
         }
     }
 
-    binary_tree_destroy(bt);
+   binary_tree_destroy(bt);
 
     return 0;
 }
