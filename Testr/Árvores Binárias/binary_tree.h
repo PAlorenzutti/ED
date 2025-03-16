@@ -46,7 +46,7 @@ void binary_tree_destroy(BinaryTree *bt);
 //a funcao abaixo pode ser util para debug, mas nao eh obrigatoria.
 void binary_tree_print(BinaryTree *bt); //
 
-Vector *binary_tree_levelorder_traversal(BinaryTree *bt);
+Vector *binary_tree_levelorder_traversal(BinaryTree *bt);//
 Vector *binary_tree_inorder_traversal_recursive(BinaryTree *bt);
 Vector *binary_tree_preorder_traversal_recursive(BinaryTree *bt);
 Vector *binary_tree_postorder_traversal_recursive(BinaryTree *bt);

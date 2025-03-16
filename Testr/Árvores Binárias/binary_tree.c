@@ -70,7 +70,6 @@ void node_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_dest
     free(node);
 }
 
-
 void binary_tree_add(BinaryTree *bt, void *key, void *value) {
     if(binary_tree_get(bt, key) == NULL){
         Node *novo = node_construct(key, value);
@@ -372,6 +371,57 @@ Vector *binary_tree_levelorder_traversal(BinaryTree *bt) {
 
     vector_destroy(queue); // Libera a fila
     return output;
+}
+
+void inorder_recursive(Node *node, Vector *v) {
+    if (node == NULL) return;
+    inorder_recursive(node->left, v); // Visita esquerda
+    KeyValPair *kvp = key_val_pair_construct(node->key, node->val);
+    vector_push_back(v, kvp); // Visita raiz
+    inorder_recursive(node->right, v); // Visita direita
+}
+
+// Travessia in-order (esquerda, raiz, direita)
+Vector *binary_tree_inorder_traversal_recursive(BinaryTree *bt) {
+    Vector *v = vector_construct();
+    if (bt != NULL && bt->root != NULL) {
+        inorder_recursive(bt->root, v);
+    }
+    return v;
+}
+
+void preorder_recursive(Node *node, Vector *v) {
+    if (node == NULL) return;
+    KeyValPair *kvp = key_val_pair_construct(node->key, node->val);
+    vector_push_back(v, kvp); // Visita raiz
+    preorder_recursive(node->left, v); // Visita esquerda
+    preorder_recursive(node->right, v); // Visita direita
+}
+
+// Travessia pre-order (raiz, esquerda, direita)
+Vector *binary_tree_preorder_traversal_recursive(BinaryTree *bt) {
+    Vector *v = vector_construct();
+    if (bt != NULL && bt->root != NULL) {
+        preorder_recursive(bt->root, v);
+    }
+    return v;
+}
+
+void postorder_recursive(Node *node, Vector *v) {
+    if (node == NULL) return;
+    postorder_recursive(node->left, v); // Visita esquerda
+    postorder_recursive(node->right, v); // Visita direita
+    KeyValPair *kvp = key_val_pair_construct(node->key, node->val);
+    vector_push_back(v, kvp); // Visita raiz
+}
+
+// Travessia post-order (esquerda, direita, raiz)
+Vector *binary_tree_postorder_traversal_recursive(BinaryTree *bt) {
+    Vector *v = vector_construct();
+    if (bt != NULL && bt->root != NULL) {
+        postorder_recursive(bt->root, v);
+    }
+    return v;
 }
 
 void binary_tree_destroy_recursive(BinaryTree *bt, Node *node) {
