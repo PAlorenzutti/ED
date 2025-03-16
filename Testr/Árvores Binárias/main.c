@@ -41,24 +41,22 @@ int main()
         binary_tree_add(bt, new_int(val), new_int(val));
     }
 
-    binary_tree_print(bt);
-
     int m;
     scanf("%d", &m);
 
     for (int i = 0; i < m; i++) {
-        int val;
-        scanf("%d", &val);
-        void *get = binary_tree_get(bt, &val);
-        if (get != NULL) {
-            printf("%d\n", *(int *)get);
-        }
-        else {
-            printf("NULL\n");
-        }
+        KeyValPair *kvp_max = binary_tree_pop_max(bt);
+        printf("max: %d\n", *(int *) kvp_max->value);
     }
 
-   binary_tree_destroy(bt);
+    scanf("%d", &m);
+
+    for (int i = 0; i < m; i++) {
+        KeyValPair *kvp_min = binary_tree_pop_min(bt);
+        printf("min: %d\n", *(int *) kvp_min->value);
+    }
+
+    binary_tree_destroy(bt);
 
     return 0;
 }

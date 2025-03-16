@@ -3,27 +3,42 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
-typedef struct Node{
-    KeyValPair *kvp;
+typedef struct Node {
+    void *key;  // Chave do nó
+    void *val;  // Valor do nó
     struct Node *left;
     struct Node *right;
-}Node;
+} Node;
 
-struct BinaryTree{
+struct BinaryTree {
     Node *root;
     CmpFn cmp_fn;
     KeyDestroyFn key_destroy_fn;
-    KeyDestroyFn val_destroy_fn;
+    ValDestroyFn val_destroy_fn;
 };
 
-BinaryTree *binary_tree_construct(CmpFn cmp_fn, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn){
-    BinaryTree *bt = (BinaryTree*)malloc(sizeof(BinaryTree));
+KeyValPair *key_val_pair_construct(void *key, void *val){
+    KeyValPair *kvp = (KeyValPair *)malloc(sizeof(KeyValPair));
 
-    //inicia a raiz da árvore como nula;
+    kvp->key = key;
+    kvp->value = val;
+
+    return kvp;
+}
+
+void key_val_pair_destroy(KeyValPair *kvp){
+    free(kvp);
+}
+
+BinaryTree *binary_tree_construct(CmpFn cmp_fn, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn) {
+    BinaryTree *bt = (BinaryTree *)malloc(sizeof(BinaryTree));
+
+    // Inicia a raiz da árvore como nula
     bt->root = NULL;
 
-    //passa as funções de comparação e destruição para a árvore;
+    // Passa as funções de comparação e destruição para a árvore
     bt->cmp_fn = cmp_fn;
     bt->key_destroy_fn = key_destroy_fn;
     bt->val_destroy_fn = val_destroy_fn;
@@ -31,111 +46,74 @@ BinaryTree *binary_tree_construct(CmpFn cmp_fn, KeyDestroyFn key_destroy_fn, Val
     return bt;
 }
 
-//supondo sempre um nó novo;
-Node *node_construct(void *key, void *val){
-    Node *node = (Node*)malloc(sizeof(Node));
+// Supondo sempre um nó novo
+Node *node_construct(void *key, void *val) {
+    Node *node = (Node *)malloc(sizeof(Node));
 
-    //cria o par e adicionar o par ao nó;
-    KeyValPair *kvp = key_val_pair_construct(key, val);
-    node->kvp = kvp;  
+    // Inicializa a chave e o valor do nó
+    node->key = key;
+    node->val = val;
 
-    //inicia os filhos do nó como NULL;
+    // Inicia os filhos do nó como NULL
     node->left = NULL;
     node->right = NULL;
 
     return node;
 }
 
-KeyValPair *key_val_pair_construct(void *key, void *val){
-    KeyValPair *kvp = (KeyValPair*)malloc(sizeof(KeyValPair));
+void node_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn) {
+    // Destrói a chave e o valor
+    key_destroy_fn(node->key);
+    val_destroy_fn(node->val);
 
-    //passa chave e valor para o par;
-    kvp->key = key;
-    kvp->value = val;
-
-    return kvp;
+    // Destrói o nó
+    free(node);
 }
 
-void *key_val_pair_get_key(KeyValPair *kvp){
-    return kvp->key;
-}
 
-void *key_val_pair_get_val(KeyValPair *kvp){
-    return kvp->value;
-}
+void binary_tree_add(BinaryTree *bt, void *key, void *value) {
+    if(binary_tree_get(bt, key) == NULL){
+        Node *novo = node_construct(key, value);
 
-void key_val_pair_destroy(KeyValPair *kvp){
-    free(kvp);
-}
-
-Node *add_recursive(Node *node, void *key, void *value, CmpFn cmp_fn){
-    //se o nó for null, significa que ele chegou ao final de algum ramo, portanto cria ele como se fosse o último;
-    if (node == NULL){
-        return node_construct(key, value);
-    }
-
-    //se a chave tiver um valor menor, insere à esquerda recursivamente;
-    //se a chave tiver um valor maior, insere à direita recursivamente;
-    if (cmp_fn(key, key_val_pair_get_key(node->kvp)) < 0){
-        node->left = add_recursive(node->left, key, value, cmp_fn);
-    }else{
-        node->right = add_recursive(node->right, key, value, cmp_fn);
-    }
-
-    return node;
-}
-
-void binary_tree_add_recursive(BinaryTree *bt, void *key, void *value) {
-    if (bt == NULL) return;
-    bt->root = add_recursive(bt->root, key, value, bt->cmp_fn);
-}
-
-void binary_tree_add(BinaryTree *bt, void *key, void *value){
-    //cria um novo nó;
-    Node *novo = node_construct(key, value);
-
-    //se a cabeça for null, significa que a árvore está vazia, e o nó a ser adicionado é a nova cabeça
-    if(bt->root == NULL){
-        bt->root = novo;
-        return;
-    }
-
-    Node *atual = bt->root;
-
-    while(true){
-        //se ele for menor ou igual ao nó atual, vai pra esquerda;
-        if(bt->cmp_fn(key, key_val_pair_get_key(atual->kvp)) <= 0){
-            //se o nó da esquerda, não existir, ele é o novo nó da esquerda;
-            if(atual->left == NULL){
-                atual->left = novo;
-                break;
-            }else{
-                //se o nó existir, continua percorrendo a esquerda até não existir;
-                atual = atual->left;
-            }
+        if(bt->root == NULL){
+            bt->root = novo;
         }else{
-            //se ele for maior, vai pra direita;
-            
-            //se o da direita for igual a NULL, ele será o novo nó da direita;
-            if(atual->right == NULL){
-                atual->right = novo;
-                break;
-            }else{
-                atual = atual->right;
+            Node *atual = bt->root;
+
+            while(1){
+                if(bt->cmp_fn(key, atual->key) < 0){
+                    if(atual->left == NULL){
+                        atual->left = novo;
+                        break;
+                    }
+
+                    atual = atual->left;
+                }else{
+                    if(atual->right == NULL){
+                        atual->right = novo;
+                        break;
+                    }
+
+                    atual = atual->right;
+                }
             }
         }
+    }else{
+        bt->key_destroy_fn(key);
+        bt->val_destroy_fn(value);
     }
 }
+
 
 void *get_recursive(Node *node, void *key, CmpFn cmp_fn) {
     if (node == NULL) {
         return NULL;
     }
 
-    int cmp = cmp_fn(key, key_val_pair_get_key(node->kvp));
+    int cmp = cmp_fn(key, node->key);
 
     if (cmp == 0) {
-        return key_val_pair_get_val(node->kvp);
+        return node->val;
     }
 
     if (cmp < 0) {
@@ -145,27 +123,26 @@ void *get_recursive(Node *node, void *key, CmpFn cmp_fn) {
     }
 }
 
-
-void *binary_tree_get_recursive(BinaryTree *bt, void *key){
-    //começa a pesquisar pela raiz e retorna o que for achado (se for);
+void *binary_tree_get_recursive(BinaryTree *bt, void *key) {
+    // Começa a pesquisar pela raiz e retorna o que for achado (se for)
     return get_recursive(bt->root, key, bt->cmp_fn);
 }
 
-void *binary_tree_get(BinaryTree *bt, void *key){
-    //inicia a busca pela cabeça;
+void *binary_tree_get(BinaryTree *bt, void *key) {
+    // Inicia a busca pela raiz
     Node *atual = bt->root;
 
-    while(atual != NULL){
-        //se for igual, retorna o valor;
-        if(!bt->cmp_fn(key, key_val_pair_get_key(atual->kvp))){
-            return key_val_pair_get_val(atual->kvp);
+    while (atual != NULL) {
+        // Se for igual, retorna o valor
+        if (!bt->cmp_fn(key, atual->key)) {
+            return atual->val;
         }
 
-        //se for menor, vai pra esquerda;
-        if(bt->cmp_fn(key, key_val_pair_get_key(atual->kvp)) < 0){
+        // Se for menor, vai pra esquerda
+        if (bt->cmp_fn(key, atual->key) < 0) {
             atual = atual->left;
-        }else{
-            //se for maior, vai pra direita;
+        } else {
+            // Se for maior, vai pra direita
             atual = atual->right;
         }
     }
@@ -173,35 +150,187 @@ void *binary_tree_get(BinaryTree *bt, void *key){
     return NULL;
 }
 
-void node_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn){
-    //destrói a chave e o valor;
-    key_destroy_fn(node->kvp->key);
-    val_destroy_fn(node->kvp->value);
+//encontrar o mínimo a partir de um nó
+Node *find_min(Node *node) {
+    if (node == NULL) {
+        return NULL;
+    }
 
-    //destrói o par;
-    key_val_pair_destroy(node->kvp);
+    //para achar o mínimo do ramo, tem de percorrer até a direita o quanto der
+    while (node->left != NULL) {
+        node = node->left;
+    }
 
-    //destrói o nó;
-    free(node);
+    return node;
 }
 
-int binary_tree_empty(BinaryTree *bt){
-    return bt->root == NULL;
+//encontrar o máximo a partir de um nó
+Node *find_max(Node *node){
+    if(node == NULL){
+        return NULL;
+    }
+
+    //enquanto o próximo nó maior (da direita) existir, continua indo pra direita;
+    while(node->right != NULL){
+        node = node->right;
+    }
+
+    return node;
 }
 
-void binary_tree_destroy_recursive(BinaryTree *bt, Node *node){
-    //se o nó já estiver vazio, sai (já encerrou o ramo por aqui);
+void binary_tree_remove(BinaryTree *bt, void *key) {  
+    //assume o nó a ser removido como a raiz;
+    Node *node = bt->root;
+    Node *pai = NULL;
+
+    //procura o nó que vai ser removido de fato;
+    while(node != NULL && bt->cmp_fn(key, node->key) != 0){
+        pai = node;
+
+        if(bt->cmp_fn(key, node->key) < 0){
+            node = node->left;
+        } else {
+            node = node->right;
+        }
+    }
+
+    //se não encontrar, apenas sai da função;
     if(node == NULL){
         return;
     }
 
-    //se não retornou, tenta avançar ainda mais pra esquerda;
+    //caso 1: nó folha (não tem filhos)
+    if(node->left == NULL && node->right == NULL){
+        //se o pai for NULL, significa que é a raiz;
+        if(pai == NULL){
+            //atualiza a raiz para NULL;
+            bt->root = NULL;
+        //se não, verifica se é o filho da esquerda ou direita;
+        }else if(pai->left == node){
+            //atualiza o filho da esquerda do pai do nó a ser removido como NULL;
+            pai->left = NULL;
+        }else if(pai->right == node){
+            //atualiza o filho da direita do pai do nó a ser removido como NULL;
+            pai->right = NULL;
+        }
+
+        node_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
+    }
+    // Caso 2: nó com apenas um filho à direita
+    else if (node->left == NULL) {
+        // Se o pai for NULL, significa que é a raiz
+        if (pai == NULL) {
+            // Atualiza a raiz para o filho da direita
+            bt->root = node->right;
+        } else if (pai->left == node) {
+            // Se o nó a ser removido for o filho esquerdo do pai, atualiza o filho esquerdo do pai
+            pai->left = node->right;
+        } else if (pai->right == node) {
+            // Se o nó a ser removido for o filho direito do pai, atualiza o filho direito do pai
+            pai->right = node->right;
+        }
+
+        node_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
+    }
+    // Caso 3: nó com apenas um filho à esquerda
+    else if (node->right == NULL) {
+        // Se o pai for NULL, significa que é a raiz
+        if (pai == NULL) {
+            // Atualiza a raiz para o filho da esquerda
+            bt->root = node->left;
+        } else if (pai->left == node) {
+            // Se o nó a ser removido for o filho esquerdo do pai, atualiza o filho esquerdo do pai
+            pai->left = node->left;
+        } else if (pai->right == node) {
+            // Se o nó a ser removido for o filho direito do pai, atualiza o filho direito do pai
+            pai->right = node->left;
+        }
+
+        node_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
+    }
+
+    // Caso 4: nó com dois filhos
+    else {
+        Node *sucessor_parent = node;
+        Node *sucessor = node->right;
+    
+        // Encontra o sucessor (menor nó da subárvore direita)
+        while (sucessor->left != NULL) {
+            sucessor_parent = sucessor;
+            sucessor = sucessor->left;
+        }
+    
+        // Salva a chave e o valor do sucessor
+        void *sucessor_key = sucessor->key;
+        void *sucessor_val = sucessor->val;
+    
+        // Remove o sucessor sem destruir chave/valor
+        if (sucessor_parent == node) {
+            sucessor_parent->right = sucessor->right;
+        } else {
+            sucessor_parent->left = sucessor->right;
+        }
+        free(sucessor);
+    
+        // Destrói os valores antigos do nó atual
+        bt->key_destroy_fn(node->key);
+        bt->val_destroy_fn(node->val);
+    
+        // Atualiza o nó atual com os valores do sucessor
+        node->key = sucessor_key;
+        node->val = sucessor_val;
+    }
+}
+
+KeyValPair *binary_tree_pop_min(BinaryTree *bt){
+    Node *min = find_min(bt->root);
+
+    if(min == NULL){
+        return NULL;
+    }
+
+    KeyValPair *kvp_min = key_val_pair_construct(min->key, min->val);
+
+    printf("min: %d\n", *(int *) kvp_min->value);
+
+    binary_tree_remove(bt, min->key);
+
+    return kvp_min;
+}
+
+KeyValPair *binary_tree_pop_max(BinaryTree *bt){
+    Node *max = find_max(bt->root);
+
+    if(max == NULL){
+        return NULL;
+    }
+
+    KeyValPair *kvp_max = key_val_pair_construct(max->key, max->val);
+
+    printf("max: %d\n", *(int *) kvp_max->value);
+
+    binary_tree_remove(bt, max->key);
+
+    return kvp_max;
+}
+
+int binary_tree_empty(BinaryTree *bt) {
+    return bt->root == NULL;
+}
+
+void binary_tree_destroy_recursive(BinaryTree *bt, Node *node) {
+    // Se o nó já estiver vazio, sai (já encerrou o ramo por aqui)
+    if (node == NULL) {
+        return;
+    }
+
+    // Se não retornou, tenta avançar ainda mais pra esquerda
     binary_tree_destroy_recursive(bt, node->left);
 
-    //depois, quando concluído os filhos da esquerda, vai pro da direita;
+    // Depois, quando concluído os filhos da esquerda, vai pro da direita
     binary_tree_destroy_recursive(bt, node->right);
 
-    //destrói o nó
+    // Destrói o nó
     node_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
 }
 
@@ -217,12 +346,15 @@ void binary_tree_destroy(BinaryTree *bt) {
 
 void binary_tree_print_recursive(Node *node) {
     if (node == NULL) {
+        printf("NULL");
         return;
     }
 
+    printf("(%d, ", *(int *)node->key);
     binary_tree_print_recursive(node->left);
-    printf("%d ", *(int *)key_val_pair_get_key(node->kvp));
+    printf(", ");
     binary_tree_print_recursive(node->right);
+    printf(")");
 }
 
 void binary_tree_print(BinaryTree *bt) {
