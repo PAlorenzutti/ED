@@ -41,20 +41,18 @@ int main()
         binary_tree_add(bt, new_int(val), new_int(val));
     }
 
-    int m;
-    scanf("%d", &m);
+    Vector *v_levelorder_it = binary_tree_levelorder_traversal(bt);
 
-    for (int i = 0; i < m; i++) {
-        KeyValPair *kvp_max = binary_tree_pop_max(bt);
-        printf("max: %d\n", *(int *) kvp_max->value);
+    for (int i = 0; i < vector_size(v_levelorder_it); i++)
+    {
+        KeyValPair *kvp = vector_get(v_levelorder_it, i);
+        int *val = kvp->value;
+        printf("%d ", *val);
+        key_val_pair_destroy(kvp);
     }
+    printf("\n");
 
-    scanf("%d", &m);
-
-    for (int i = 0; i < m; i++) {
-        KeyValPair *kvp_min = binary_tree_pop_min(bt);
-        printf("min: %d\n", *(int *) kvp_min->value);
-    }
+    vector_destroy(v_levelorder_it);
 
     binary_tree_destroy(bt);
 

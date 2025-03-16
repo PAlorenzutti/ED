@@ -215,9 +215,9 @@ void vector_reverse(Vector *v){
 }
 
 void vector_destroy(Vector *v){  
-  for(int i = 0; i < v->size; i++){
-    free(v->data[i]);
-  }
+  // for(int i = 0; i < v->size; i++){
+  //   free(v->data[i]);
+  // }
   
   free(v->data);
   free(v);

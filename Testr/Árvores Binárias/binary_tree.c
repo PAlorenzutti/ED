@@ -283,39 +283,95 @@ void binary_tree_remove(BinaryTree *bt, void *key) {
 }
 
 KeyValPair *binary_tree_pop_min(BinaryTree *bt){
-    Node *min = find_min(bt->root);
-
-    if(min == NULL){
-        return NULL;
+    if (bt == NULL || bt->root == NULL) {
+        return NULL; 
     }
 
-    KeyValPair *kvp_min = key_val_pair_construct(min->key, min->val);
+    Node *current = bt->root;
+    Node *parent = NULL;
 
-    printf("min: %d\n", *(int *) kvp_min->value);
+    while (current->left != NULL){
+        parent = current;
+        current = current->left;
+    }
 
-    binary_tree_remove(bt, min->key);
+    KeyValPair *pair = malloc(sizeof(KeyValPair));
+    pair->key = current->key;
+    pair->value = current->val;
 
-    return kvp_min;
+    if (parent == NULL){
+      
+        bt->root = current->right; 
+    }
+    else{
+        parent->left = current->right;  
+    }
+
+    free(current);
+
+    return pair;
 }
 
 KeyValPair *binary_tree_pop_max(BinaryTree *bt){
-    Node *max = find_max(bt->root);
-
-    if(max == NULL){
+    if (bt == NULL || bt->root == NULL) {
         return NULL;
     }
 
-    KeyValPair *kvp_max = key_val_pair_construct(max->key, max->val);
+    Node *current = bt->root;
+    Node *parent = NULL;
 
-    printf("max: %d\n", *(int *) kvp_max->value);
+    while (current->right != NULL) {
+        parent = current;
+        current = current->right;
+    }
 
-    binary_tree_remove(bt, max->key);
+    KeyValPair *pair = malloc(sizeof(KeyValPair));
+    pair->key = current->key;
+    pair->value = current->val;
 
-    return kvp_max;
+    if (parent == NULL) {
+        bt->root = current->left;  
+    }
+    else{
+        parent->right = current->left;  
+    }
+
+    free(current);
+
+    return pair;
 }
 
 int binary_tree_empty(BinaryTree *bt) {
     return bt->root == NULL;
+}
+
+Vector *binary_tree_levelorder_traversal(BinaryTree *bt) {
+    if (bt == NULL || bt->root == NULL) {
+        return vector_construct(); // Retorna vetor vazio se a árvore for nula/vazia
+    }
+
+    Vector *output = vector_construct(); // Vetor de KeyValPair
+    Vector *queue = vector_construct(); // Fila de nós
+    vector_push_back(queue, bt->root); // Inicia com a raiz
+
+    while (vector_size(queue) > 0) {
+        Node *current = vector_pop_front(queue); // Desenfileira o nó atual
+
+        // Cria um KeyValPair e adiciona ao vetor de saída
+        KeyValPair *kvp = key_val_pair_construct(current->key, current->val);
+        vector_push_back(output, kvp);
+
+        // Enfileira apenas filhos não nulos
+        if (current->left != NULL) {
+            vector_push_back(queue, current->left);
+        }
+        if (current->right != NULL) {
+            vector_push_back(queue, current->right);
+        }
+    }
+
+    vector_destroy(queue); // Libera a fila
+    return output;
 }
 
 void binary_tree_destroy_recursive(BinaryTree *bt, Node *node) {
