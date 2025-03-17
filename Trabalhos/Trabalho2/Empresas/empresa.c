@@ -36,6 +36,10 @@ char *get_sigla_empresa(Empresa *e){
     return e->sigla;
 }
 
+float get_valor_unitario(Empresa *e){
+    return e->valor_unitario;
+}
+
 //função de comparação para tabela hash
 int compara_string(void *key1, void *key2) {
     char *str1 = (char *)key1;

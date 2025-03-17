@@ -7,6 +7,8 @@
 typedef struct KeyValPair KeyValPair;
 
 KeyValPair *key_val_pair_construct(void *key, void *val); //
+void *key_val_pair_get_key(KeyValPair *kvp); //
+void *key_val_pair_get_val(KeyValPair *kvp); //
 void key_val_pair_destroy(KeyValPair *kvp); //
 
 typedef int (*CmpFn)(void *, void *); //

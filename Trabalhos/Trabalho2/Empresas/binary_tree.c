@@ -34,6 +34,14 @@ KeyValPair *key_val_pair_construct(void *key, void *val){
     return kvp;
 }
 
+void *key_val_pair_get_key(KeyValPair *kvp){
+    return kvp->key;
+} 
+
+void *key_val_pair_get_val(KeyValPair *kvp){
+    return kvp->value;
+}
+
 void key_val_pair_destroy(KeyValPair *kvp){
     free(kvp);
 }

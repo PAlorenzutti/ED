@@ -76,6 +76,22 @@ void max_empresa(BinaryTree *bt){
     }
 }
 
+void sorted_empresas(BinaryTree *bt){
+    Vector *v = binary_tree_inorder_traversal_recursive(bt);
+
+    for(int i = 0; i < vector_size(v); i++){
+        KeyValPair *e = (KeyValPair*)vector_get(v, i);
+        Empresa *empresa = (Empresa*)key_val_pair_get_val(e);
+        
+        //printa a sigla da empresa e seu valor unitário por ação;
+        printf("%s %.2f\n", get_sigla_empresa(empresa), get_valor_unitario(empresa));
+
+        key_val_pair_destroy(e);
+    }
+
+    vector_destroy(v);
+}
+
 void operacoes(HashTable *h, BinaryTree *bt){
     char op[9];
     scanf("%8s", op);
@@ -94,6 +110,10 @@ void operacoes(HashTable *h, BinaryTree *bt){
     if(strcmp(op, "MAX") == 0){
         max_empresa(bt);
     }
+
+    if(strcmp(op, "SORTED") == 0){
+        sorted_empresas(bt);
+    }
 }
 
 int main() {
@@ -109,6 +129,8 @@ int main() {
     //operações
     int m;
     scanf("%d\n", &m);
+
+    binary_tree_print(bt, print_empresa);
 
     for(int i = 0; i < m; i++){
         operacoes(h, bt);
