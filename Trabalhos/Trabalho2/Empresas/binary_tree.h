@@ -26,9 +26,9 @@ int binary_tree_empty(BinaryTree *bt); //
 
 void binary_tree_remove(BinaryTree *bt, void *key);
 
-KeyValPair *binary_tree_min(BinaryTree *bt);
+void *binary_tree_min(BinaryTree *bt);
 
-KeyValPair *binary_tree_max(BinaryTree *bt);
+void *binary_tree_max(BinaryTree *bt);
 
 KeyValPair *binary_tree_pop_min(BinaryTree *bt);
 

@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void leitura_arquivo(HashTable *h){
+void leitura_arquivo(HashTable *h, BinaryTree *bt){
     //leitura do arquivo;
     char filename[100];
     scanf("%99s", filename);
@@ -29,6 +29,9 @@ void leitura_arquivo(HashTable *h){
 
         //adiciona na tabela hash (sigla como chave, empresa como valor);
         hash_table_set(h, sigla, e);
+
+        //adiciona na árvore binária (empresa como par chave-valor);
+        binary_tree_add(bt, e, e);
     }
 
     fclose(file);
@@ -47,12 +50,45 @@ void get_empresa(HashTable *h){
     }
 }
 
-void operacoes(HashTable *h){
+void min_empresa(BinaryTree *bt){
+    Empresa *e = (Empresa*)binary_tree_min(bt);
+
+    if(e == NULL){
+        printf("Empresa nao encontrada\n");
+    }else{
+        //printa o nome da empresa
+        printf("%s\n", get_sigla_empresa(e));
+    }
+}
+
+void max_empresa(BinaryTree *bt){
+    Empresa *e = (Empresa*)binary_tree_max(bt);
+
+    if(e == NULL){
+        printf("Empresa nao encontrada\n");
+    }else{
+        //printa o nome da empresa;
+        printf("%s\n", get_sigla_empresa(e));
+    }
+}
+
+void operacoes(HashTable *h, BinaryTree *bt){
     char op[9];
     scanf("%8s", op);
 
+    //pegar a empresa a partir da sigla;
     if(strcmp(op, "GET") == 0){
        get_empresa(h);
+    }
+
+    //pegar a empresa com o menor valor unitário na árvore;
+    if(strcmp(op, "MIN") == 0){
+        min_empresa(bt);
+    }
+
+    //pegar a empresa com o maior valor unitário na árvore;
+    if(strcmp(op, "MAX") == 0){
+        max_empresa(bt);
     }
 }
 
@@ -64,14 +100,14 @@ int main() {
     HashTable *h = hash_table_construct(23, hash_empresa, compara_string);
 
     //leitura do arquivo
-    leitura_arquivo(h);
+    leitura_arquivo(h, bt);
 
     //operações
     int m;
     scanf("%d\n", &m);
 
     for(int i = 0; i < m; i++){
-        operacoes(h);
+        operacoes(h, bt);
     }
 
     return 0;

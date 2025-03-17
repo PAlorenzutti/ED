@@ -28,6 +28,14 @@ Empresa* empresa_construct(char *nome, char *sigla, float valor_unitario, int to
     return e;
 }
 
+char *get_nome_empresa(Empresa *e){
+    return e->nome;
+}
+
+char *get_sigla_empresa(Empresa *e){
+    return e->sigla;
+}
+
 //função de comparação para tabela hash
 int compara_string(void *key1, void *key2) {
     char *str1 = (char *)key1;

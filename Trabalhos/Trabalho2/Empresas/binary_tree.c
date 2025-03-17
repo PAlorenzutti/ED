@@ -346,6 +346,38 @@ KeyValPair *binary_tree_pop_max(BinaryTree *bt){
     return pair;
 }
 
+void *binary_tree_min(BinaryTree *bt) {
+    if (bt == NULL || bt->root == NULL) {
+        return NULL;
+    }
+
+    Node *current = bt->root;
+
+    // Encontra o nó mínimo (mais à esquerda)
+    while (current->left != NULL) {
+        current = current->left;
+    }
+
+    //retorna o valor atual
+    return current->val;
+}
+
+void *binary_tree_max(BinaryTree *bt) {
+    if (bt == NULL || bt->root == NULL) {
+        return NULL;
+    }
+
+    Node *current = bt->root;
+
+    // Encontra o nó máximo (mais à direita)
+    while (current->right != NULL) {
+        current = current->right;
+    }
+
+    //retorna o valor atual
+    return current->val;
+}
+
 int binary_tree_empty(BinaryTree *bt) {
     return bt->root == NULL;
 }
