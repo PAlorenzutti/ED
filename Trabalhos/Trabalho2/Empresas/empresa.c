@@ -36,8 +36,20 @@ char *get_sigla_empresa(Empresa *e){
     return e->sigla;
 }
 
-float get_valor_unitario(Empresa *e){
+float get_valor_unitario_empresa(Empresa *e){
     return e->valor_unitario;
+}
+
+int get_total_acoes_empresa(Empresa *e){
+    return e->total_acoes;
+}
+
+int get_acoes_vendidas_empresa(Empresa *e){
+    return e->acoes_vendidas;
+}
+
+void update_valor_unitario_empresa(Empresa *e, float novo_valor){
+    e->valor_unitario = novo_valor;
 }
 
 //função de comparação para tabela hash

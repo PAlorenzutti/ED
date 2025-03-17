@@ -14,7 +14,13 @@ char *get_nome_empresa(Empresa *e);
 
 char *get_sigla_empresa(Empresa *e);
 
-float get_valor_unitario(Empresa *e);
+float get_valor_unitario_empresa(Empresa *e);
+
+int get_total_acoes_empresa(Empresa *e);
+
+int get_acoes_vendidas_empresa(Empresa *e);
+
+void update_valor_unitario_empresa(Empresa *e, float novo_valor);
 
 int compara_empresas(void *empresa_1, void *empresa_2);
 

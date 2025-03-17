@@ -84,12 +84,41 @@ void sorted_empresas(BinaryTree *bt){
         Empresa *empresa = (Empresa*)key_val_pair_get_val(e);
         
         //printa a sigla da empresa e seu valor unitário por ação;
-        printf("%s %.2f\n", get_sigla_empresa(empresa), get_valor_unitario(empresa));
+        printf("%s %.2f\n", get_sigla_empresa(empresa), get_valor_unitario_empresa(empresa));
 
         key_val_pair_destroy(e);
     }
 
     vector_destroy(v);
+}
+
+void update_empresa(HashTable *h, BinaryTree *bt) {
+    char sigla[MAX_SIGLA_LENGTH];
+    float novo_valor;
+
+    scanf(" %31s %f", sigla, &novo_valor);
+
+    // 1) Pegar a empresa da tabela hash
+    Empresa *e = (Empresa*)hash_table_get(h, sigla);
+    if (e == NULL) {
+        printf("Empresa nao encontrada\n");
+        return;
+    }
+
+    // 2) Copiar os dados para uma nova empresa na memória (cópia profunda)
+    Empresa *temp = empresa_construct(strdup(get_nome_empresa(e)), strdup(get_sigla_empresa(e)), get_valor_unitario_empresa(e), get_total_acoes_empresa(e), get_acoes_vendidas_empresa(e));
+
+    // 3) Remover a cópia (com valor antigo) da árvore
+    binary_tree_remove(bt, temp);
+
+    // 4.1) Atualizar a empresa original na tabela hash
+    update_valor_unitario_empresa(e, novo_valor);
+
+    // 4.2) Adicionar a empresa atualizada de volta à árvore
+    binary_tree_add(bt, e, e);
+
+    // 5) Liberar a cópia temporária (incluindo strings alocadas)
+    empresa_destroy(temp);
 }
 
 void operacoes(HashTable *h, BinaryTree *bt){
@@ -113,6 +142,10 @@ void operacoes(HashTable *h, BinaryTree *bt){
 
     if(strcmp(op, "SORTED") == 0){
         sorted_empresas(bt);
+    }
+
+    if(strcmp(op, "UPDATE") == 0){
+        update_empresa(h, bt);
     }
 }
 
