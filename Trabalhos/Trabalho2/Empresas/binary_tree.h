@@ -4,11 +4,7 @@
 
 #include "vector.h"
 
-typedef struct
-{
-    void *key;
-    void *value;
-} KeyValPair;
+typedef struct KeyValPair KeyValPair;
 
 KeyValPair *key_val_pair_construct(void *key, void *val); //
 void key_val_pair_destroy(KeyValPair *kvp); //
@@ -16,6 +12,7 @@ void key_val_pair_destroy(KeyValPair *kvp); //
 typedef int (*CmpFn)(void *, void *); //
 typedef void (*KeyDestroyFn)(void *); //
 typedef void (*ValDestroyFn)(void *); //
+typedef void (*PrintFn)(void *); //
 
 typedef struct BinaryTree BinaryTree; //
 
@@ -44,7 +41,7 @@ void *binary_tree_get(BinaryTree *bt, void *key);
 void binary_tree_destroy(BinaryTree *bt);
 
 //a funcao abaixo pode ser util para debug, mas nao eh obrigatoria.
-void binary_tree_print(BinaryTree *bt); //
+void binary_tree_print(BinaryTree *bt, PrintFn print_fn); //
 
 Vector *binary_tree_levelorder_traversal(BinaryTree *bt);//
 Vector *binary_tree_inorder_traversal_recursive(BinaryTree *bt);

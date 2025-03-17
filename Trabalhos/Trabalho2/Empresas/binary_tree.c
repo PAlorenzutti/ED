@@ -19,6 +19,12 @@ struct BinaryTree {
     ValDestroyFn val_destroy_fn;
 };
 
+struct KeyValPair
+{
+    void *key;
+    void *value;
+};
+
 KeyValPair *key_val_pair_construct(void *key, void *val){
     KeyValPair *kvp = (KeyValPair *)malloc(sizeof(KeyValPair));
 
@@ -47,7 +53,7 @@ BinaryTree *binary_tree_construct(CmpFn cmp_fn, KeyDestroyFn key_destroy_fn, Val
 }
 
 // Supondo sempre um nó novo
-Node *node_construct(void *key, void *val) {
+Node *treenode_construct(void *key, void *val) {
     Node *node = (Node *)malloc(sizeof(Node));
 
     // Inicializa a chave e o valor do nó
@@ -61,7 +67,7 @@ Node *node_construct(void *key, void *val) {
     return node;
 }
 
-void node_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn) {
+void treenode_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn) {
     // Destrói a chave e o valor
     key_destroy_fn(node->key);
     val_destroy_fn(node->val);
@@ -72,7 +78,7 @@ void node_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_dest
 
 void binary_tree_add(BinaryTree *bt, void *key, void *value) {
     if(binary_tree_get(bt, key) == NULL){
-        Node *novo = node_construct(key, value);
+        Node *novo = treenode_construct(key, value);
 
         if(bt->root == NULL){
             bt->root = novo;
@@ -213,7 +219,7 @@ void binary_tree_remove(BinaryTree *bt, void *key) {
             pai->right = NULL;
         }
 
-        node_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
+        treenode_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
     }
     // Caso 2: nó com apenas um filho à direita
     else if (node->left == NULL) {
@@ -229,7 +235,7 @@ void binary_tree_remove(BinaryTree *bt, void *key) {
             pai->right = node->right;
         }
 
-        node_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
+        treenode_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
     }
     // Caso 3: nó com apenas um filho à esquerda
     else if (node->right == NULL) {
@@ -245,7 +251,7 @@ void binary_tree_remove(BinaryTree *bt, void *key) {
             pai->right = node->left;
         }
 
-        node_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
+        treenode_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
     }
 
     // Caso 4: nó com dois filhos
@@ -437,7 +443,7 @@ void binary_tree_destroy_recursive(BinaryTree *bt, Node *node) {
     binary_tree_destroy_recursive(bt, node->right);
 
     // Destrói o nó
-    node_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
+    treenode_destroy(node, bt->key_destroy_fn, bt->val_destroy_fn);
 }
 
 void binary_tree_destroy(BinaryTree *bt) {
@@ -450,21 +456,22 @@ void binary_tree_destroy(BinaryTree *bt) {
     free(bt);
 }
 
-void binary_tree_print_recursive(Node *node) {
+void binary_tree_print_recursive(Node *node, PrintFn print_fn){
     if (node == NULL) {
         printf("NULL");
         return;
     }
 
-    printf("(%d, ", *(int *)node->key);
-    binary_tree_print_recursive(node->left);
+    printf("(");
+    print_fn(node->key);
+    binary_tree_print_recursive(node->left, print_fn);
     printf(", ");
-    binary_tree_print_recursive(node->right);
+    binary_tree_print_recursive(node->right, print_fn);
     printf(")");
 }
 
-void binary_tree_print(BinaryTree *bt) {
+void binary_tree_print(BinaryTree *bt, PrintFn print_fn) {
     if (bt == NULL) return;
-    binary_tree_print_recursive(bt->root);
+    binary_tree_print_recursive(bt->root, print_fn);
     printf("\n");
 }
