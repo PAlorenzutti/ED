@@ -27,8 +27,12 @@ void leitura_arquivo(HashTable *h, BinaryTree *bt){
 
         Empresa *e = empresa_construct(nome, sigla, valor_unitario, total_acoes, acoes_vendidas);
 
+        //libera as strings alocadas
+        free(nome);
+        free(sigla);
+
         //adiciona na tabela hash (sigla como chave, empresa como valor);
-        hash_table_set(h, sigla, e);
+        hash_table_set(h, get_sigla_empresa(e), e);
 
         //adiciona na árvore binária (empresa como par chave-valor);
         binary_tree_add(bt, e, e);
@@ -110,5 +114,9 @@ int main() {
         operacoes(h, bt);
     }
 
+    //liberar memória  
+    hash_table_destroy(h);
+    binary_tree_destroy(bt);
+    
     return 0;
 }

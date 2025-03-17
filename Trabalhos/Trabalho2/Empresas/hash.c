@@ -50,8 +50,8 @@ HashTableItem *hash_table_item_construct(void *key, void *val){
 }
 
 void hash_table_item_destroy(HashTableItem *item){
-    free(item->key);
-    free(item->val);
+    // free(item->key);
+    // free(item->val);
     free(item);
 }
 

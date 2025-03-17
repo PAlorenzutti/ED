@@ -68,9 +68,12 @@ Node *treenode_construct(void *key, void *val) {
 }
 
 void treenode_destroy(Node *node, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn) {
-    // Destrói a chave e o valor
-    key_destroy_fn(node->key);
-    val_destroy_fn(node->val);
+    if(key_destroy_fn == val_destroy_fn){
+        key_destroy_fn(node->key);
+    }else{
+        key_destroy_fn(node->key);
+        val_destroy_fn(node->val);
+    }
 
     // Destrói o nó
     free(node);
