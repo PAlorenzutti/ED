@@ -12,6 +12,8 @@ Jogador* jogador_construct(char *nickname, char* nome, int disputadas, int venci
 
 char* get_nickname_jogador(Jogador* j);
 
+float get_percentual_vitorias(Jogador* j);
+
 int hash_jogador(HashTable *h, void *key);
 
 int compara_string(void *key1, void *key2);

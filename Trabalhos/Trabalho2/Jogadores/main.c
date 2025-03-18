@@ -71,20 +71,20 @@ void max_jogador(BinaryTree* bt){
     }
 }
 
-// void sorted_empresas(BinaryTree* bt){
-//     Vector* v = binary_tree_inorder_traversal_recursive(bt);
+void sorted_jogadores(BinaryTree* bt){
+    Vector* v = binary_tree_inorder_traversal_recursive(bt);
 
-//     for(int i = 0; i< vector_size(v); i++){
-//         KeyValPair* e = (KeyValPair*)vector_get(v, i);
-//         Jogador* jogador = (Jogador*)key_val_pair_get_val(e);
+    for(int i = 0; i< vector_size(v); i++){
+        KeyValPair* j = (KeyValPair*)vector_get(v, i);
+        Jogador* jogador = (Jogador*)key_val_pair_get_val(j);
 
-//         printf("%s %.2f\n", get_sigla_empresa(jogador), get_valor_unitario_empresa(jogador));
+        printf("%s %.2f\n", get_nickname_jogador(jogador), get_percentual_vitorias(jogador));
 
-//         key_val_pair_destroy(e);
-//     }
+        key_val_pair_destroy(j);
+    }
 
-//     vector_destroy(v);
-// }
+    vector_destroy(v);
+}
 
 // void update_empresa(HashTable* h, BinaryTree* bt){
 //     char nickname[MAX_SIGLA_LENGTH];
@@ -158,9 +158,9 @@ void operacoes(HashTable* h, BinaryTree* bt){
         max_jogador(bt);
     }
 
-    // if(strcmp(op, "SORTED") == 0){
-    //     sorted_empresas(bt);
-    // }
+    if(strcmp(op, "SORTED") == 0){
+        sorted_jogadores(bt);
+    }
 
     // if(strcmp(op, "UPDATE") == 0){
     //     update_empresa(h, bt);

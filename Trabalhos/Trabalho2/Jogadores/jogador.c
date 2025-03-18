@@ -38,6 +38,10 @@ char* get_nickname_jogador(Jogador* j){
     return j->nickname;
 }
 
+float get_percentual_vitorias(Jogador* j){
+    return j->percentual;
+}
+
 int compara_string(void *key1, void *key2) {
     char *str1 = (char *)key1;
     char *str2 = (char *)key2;
