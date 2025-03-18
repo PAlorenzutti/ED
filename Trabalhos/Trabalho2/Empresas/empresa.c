@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-struct Empresa{
+struct Empresa {
     char nome[MAX_NAME_LENGTH];
     char sigla[MAX_SIGLA_LENGTH];
     float valor_unitario;
@@ -52,7 +52,6 @@ void update_valor_unitario_empresa(Empresa *e, float novo_valor){
     e->valor_unitario = novo_valor;
 }
 
-//função de comparação para tabela hash
 int compara_string(void *key1, void *key2) {
     char *str1 = (char *)key1;
     char *str2 = (char *)key2;
@@ -60,7 +59,6 @@ int compara_string(void *key1, void *key2) {
     return strcmp(str1, str2);
 }
 
-//calculo de chave hash para empresas com base na sigla (string)
 int hash_empresa(HashTable *h, void *key) {
     char *str = (char*)key;
     int size = hash_table_size(h);
@@ -72,7 +70,6 @@ int hash_empresa(HashTable *h, void *key) {
         hash_val = (hash_val * base + str[i]) % size;
     }
 
-    // Ensure non-negative hash value
     hash_val = hash_val % size;
     if (hash_val < 0) {
         hash_val += size;
@@ -81,25 +78,24 @@ int hash_empresa(HashTable *h, void *key) {
     return hash_val;
 }
 
-//função de comparação para árvore binária
-int compara_empresas(void *empresa_1, void *empresa_2){
+int compara_empresas(void *empresa_1, void *empresa_2) {
     Empresa *e1 = (Empresa*)empresa_1;
     Empresa *e2 = (Empresa*)empresa_2;
 
-    if(e1->valor_unitario == e2->valor_unitario){
+    if (e1->valor_unitario == e2->valor_unitario) {
         return strcmp(e1->sigla, e2->sigla);
     }
 
-    return e1->valor_unitario - e2->valor_unitario;
+    return (e1->valor_unitario > e2->valor_unitario) ? 1 : -1;
 }
 
-void print_empresa(void *empresa){
+void print_empresa(void *empresa) {
     Empresa *e = (Empresa*)empresa;
 
     printf("%s %s %.2f %d %d\n", e->nome, e->sigla, e->valor_unitario, e->total_acoes, e->acoes_vendidas);
 }
 
-void empresa_destroy(void *e){
+void empresa_destroy(void *e) {
     Empresa *empresa = (Empresa*)e;
     
     free(empresa);

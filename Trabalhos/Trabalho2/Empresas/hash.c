@@ -15,16 +15,16 @@ struct HashTable{
     HashFunction hash_fn;
     CmpFunction cmp_fn;
     int table_size;
-    int n_elements;
+    int num_elems;
 };
 
 struct HashTableIterator{
     ForwardList **buckets;
-    int table_size;          // Tamanho total da tabela
-    int current_bucket;      // Balde atual
-    Node *current_node;      // Nó atual dentro do balde
-    int current_element;     // Contador de elementos percorridos
-    int total_elements;      // Total de elementos na tabela
+    int table_size;          
+    int current_bucket;     
+    Node *current_node;     
+    int current_element;     
+    int total_elements;     
 };
 
 HashTable *hash_table_construct(int table_size, HashFunction hash_fn, CmpFunction cmp_fn){
@@ -34,7 +34,7 @@ HashTable *hash_table_construct(int table_size, HashFunction hash_fn, CmpFunctio
     h->buckets = calloc(h->table_size, sizeof(ForwardList*));
     h->hash_fn = hash_fn;
     h->cmp_fn = cmp_fn;
-    h->n_elements = 0;
+    h->num_elems = 0;
 
     return h;
 }
@@ -46,7 +46,6 @@ HashTableItem *hash_table_item_construct(void *key, void *val){
     item->val = val;
 
     return item;
-
 }
 
 void hash_table_item_destroy(HashTableItem *item){
@@ -58,48 +57,38 @@ void hash_table_item_destroy(HashTableItem *item){
 void *hash_table_get(HashTable *h, void *key){
     int hash = h->hash_fn(h, key);
 
-    //se o balde estiver vazio, retorna NULL;
     if (h->buckets[hash] == NULL){
         return NULL;
     }
 
-    //pega a cabeça do balde;
     Node *n = forward_list_get_node(h->buckets[hash], 0);
 
-    //itera sobre o balde;
     while (n != NULL) {
         HashTableItem *item = (HashTableItem *)n->value;
 
-        //se encontrar a chave, retorna o valor associado a ela;
         if (h->cmp_fn(item->key, key) == 0) {
-            return item->val; // Retorna o valor em vez do item
+            return item->val;
         }
 
         n = n->next;
     }
     
-    //se não encontrou nada, retorna NULL;
     return NULL;
 }
 
 void *hash_table_set(HashTable *h, void *key, void *val) {
-    //obtém a hash da chave
     int hash = h->hash_fn(h, key);
 
-    //se o balde estiver vazio, cria a lista dele
     if (h->buckets[hash] == NULL) {
         h->buckets[hash] = forward_list_construct();
     }
 
-    //percorre a lista para verificar se a chave já existe
     Node *n = forward_list_get_node(h->buckets[hash], 0);
 
     while (n != NULL) {
         HashTableItem *item = (HashTableItem *)n->value;
 
-        //comparando empresa com sigla, atualmente
         if (h->cmp_fn(item->key, key) == 0) {
-            // A chave já existe, então atualiza o valor e retorna o valor antigo
             void *old_val = item->val;
             item->val = val;
 
@@ -109,54 +98,43 @@ void *hash_table_set(HashTable *h, void *key, void *val) {
         n = n->next;
     }
 
-    //se a chave não existe, adiciona um novo item
-    HashTableItem *new_item = hash_table_item_construct(key, val);
+    HashTableItem *newItem = hash_table_item_construct(key, val);
 
-    forward_list_push_front(h->buckets[hash], new_item);
+    forward_list_push_front(h->buckets[hash], newItem);
 
-    h->n_elements++;
+    h->num_elems++;
 
     return NULL;
 }
 
 void *hash_table_pop(HashTable *h, void *key){
-    //calcula o hash da chave;
     int hash = h->hash_fn(h, key);
 
-    //pega a cabeça do balde em questão
     Node *n = forward_list_get_node(h->buckets[hash], 0);
     int i = 0;
 
     while (n != NULL) {
-        HashTableItem *atual = (HashTableItem *)n->value;
+        HashTableItem *current = (HashTableItem *)n->value;
 
-        //se for igual, tira o nó da lista e retorna o valor;
-        if (h->cmp_fn(atual->key, key) == 0) {
-            //popa o item da lista do balde;
-            HashTableItem *old = (HashTableItem*)forward_list_pop_index(h->buckets[hash], i);
+        if (h->cmp_fn(current->key, key) == 0) {
+            HashTableItem *old_item = (HashTableItem*)forward_list_pop_index(h->buckets[hash], i);
 
-            //pega o valor do item antigo;
-            void *old_val = old->val;
+            void *old_val = old_item->val;
 
-            //destrói o item antigo;
-            free(old->key);
-            free(old);
+            // destroy the old item;
+            // free(old_item->key);
+            free(old_item);
 
-            //diminui o número de elementos na tabela;
-            h->n_elements--;
+            h->num_elems--;
 
-            //retorna o valor antigo;
             return old_val;
         }
         
-        //se não achou, atualiza o nó atual com o próximo;
         n = n->next;
 
-        //aumenta o índice;
         i++;
     }
 
-    //se não achar nada com essa chave, retorna NULL;
     return NULL;
 }
 
@@ -165,7 +143,7 @@ int hash_table_size(HashTable *h){
 }
 
 int hash_table_num_elems(HashTable *h){
-    return h->n_elements;
+    return h->num_elems;
 }
 
 void hash_table_destroy(HashTable *h)
@@ -196,7 +174,7 @@ HashTableIterator *hash_table_iterator(HashTable *h) {
     it->current_bucket = 0;
     it->current_node = NULL;
     it->current_element = 0;
-    it->total_elements = h->n_elements; // Captura o total de elementos
+    it->total_elements = h->num_elems;
 
     return it;
 }
@@ -207,29 +185,30 @@ int hash_table_iterator_is_over(HashTableIterator *it) {
 
 HashTableItem *hash_table_iterator_next(HashTableIterator *it) {
     if (it->current_element >= it->total_elements) {
-        return NULL; // Todos os elementos já foram percorridos
+        return NULL;
     }
 
     while (it->current_bucket < it->table_size) {
-        // Encontra o próximo balde não vazio
         if (it->current_node == NULL) {
             ForwardList *bucket = it->buckets[it->current_bucket];
+            
             while (bucket == NULL || forward_list_get_node(bucket, 0) == NULL) {
                 it->current_bucket++;
+
                 if (it->current_bucket >= it->table_size) {
-                    return NULL; // Fim da tabela
+                    return NULL; 
                 }
+                
                 bucket = it->buckets[it->current_bucket];
             }
+
             it->current_node = forward_list_get_node(bucket, 0);
         }
 
-        // Retorna o item atual e avança
         HashTableItem *item = (HashTableItem *)it->current_node->value;
         it->current_node = it->current_node->next;
         it->current_element++;
 
-        // Se o balde terminou, avança para o próximo
         if (it->current_node == NULL) {
             it->current_bucket++;
         }
@@ -240,41 +219,32 @@ HashTableItem *hash_table_iterator_next(HashTableIterator *it) {
     return NULL;
 }
 
-
 void hash_table_iterator_destroy(HashTableIterator *it){
     free(it);
 }
 
 Vector *hash_to_vector(HashTable *h){
-    //constrói o iterator;
     HashTableIterator *it = hash_table_iterator(h);
 
-    //constrói o vector;
     Vector *v = vector_construct();
 
-    //enquanto o iterator não chegar ao fim, vai adicionando hash item no vector;
     while(!hash_table_iterator_is_over(it)){
         vector_push_back(v, hash_table_iterator_next(it));
     }
 
-    //destrói o iterator;
     hash_table_iterator_destroy(it);
 
     return v;
 }
 
 void hash_table_print(HashTable *h, void (*print_fn)(void *)){
-    //converte a tabela hash para um vetor;
     Vector *v = hash_to_vector(h);
 
-    //itera sobre o vetor, printando cada item;
     for(int i = 0; i < vector_size(v); i++){
         HashTableItem *item = (HashTableItem *)vector_get(v, i);
         print_fn(item->val);
         printf("\n");
     }
 
-    //destrói o vetor;
     vector_destroy(v);
 }
-

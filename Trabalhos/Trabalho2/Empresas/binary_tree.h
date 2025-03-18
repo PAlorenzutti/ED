@@ -4,6 +4,8 @@
 
 #include "vector.h"
 
+typedef struct Node Node;
+
 typedef struct KeyValPair KeyValPair;
 
 KeyValPair *key_val_pair_construct(void *key, void *val); //
