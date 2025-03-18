@@ -86,7 +86,11 @@ int compara_empresas(void *empresa_1, void *empresa_2) {
         return strcmp(e1->sigla, e2->sigla);
     }
 
-    return (e1->valor_unitario > e2->valor_unitario) ? 1 : -1;
+    if(e1->valor_unitario < e2->valor_unitario){
+        return -1;
+    }else{
+        return 1;
+    }
 }
 
 void print_empresa(void *empresa) {
