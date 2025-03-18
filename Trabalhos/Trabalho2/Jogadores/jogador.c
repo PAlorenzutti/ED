@@ -83,6 +83,7 @@ void print_jogador(void *j){
     Jogador *jogador = (Jogador*) j;
 
     printf("%s %s %d %d\n", jogador->nickname, jogador->nome, jogador->disputadas, jogador->vencidas);
+    // printf("Percentual de vitorias: %.2f\n", jogador->percentual);
 }
 
 void jogador_destroy(void* j){

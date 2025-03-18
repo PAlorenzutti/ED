@@ -51,25 +51,25 @@ void get_jogador(HashTable *h)
     }
 }
 
-// void min_empresa(BinaryTree* bt){
-//     Jogador* jogador = (Jogador*)binary_tree_min(bt);
+void min_jogador(BinaryTree* bt){
+    Jogador* jogador = (Jogador*)binary_tree_min(bt);
 
-//     if(jogador == NULL){
-//         printf("Jogador nao encontrada\n");
-//     }else{
-//          printf("%s\n", get_sigla_empresa(jogador));
-//     }
-// }
+    if(jogador == NULL){
+        printf("Jogador nao encontrado\n");
+    }else{
+         printf("%s\n", get_nickname_jogador(jogador));
+    }
+}
 
-// void max_empresa(BinaryTree* bt){
-//     Jogador* jogador = (Jogador*)binary_tree_max(bt);
+void max_jogador(BinaryTree* bt){
+    Jogador* jogador = (Jogador*)binary_tree_max(bt);
 
-//     if(jogador == NULL){
-//         printf("Jogador nao encontrada\n");
-//     }else{
-//          printf("%s\n", get_sigla_empresa(jogador));
-//     }
-// }
+    if(jogador == NULL){
+        printf("Jogador nao encontrada\n");
+    }else{
+         printf("%s\n", get_nickname_jogador(jogador));
+    }
+}
 
 // void sorted_empresas(BinaryTree* bt){
 //     Vector* v = binary_tree_inorder_traversal_recursive(bt);
@@ -150,13 +150,13 @@ void operacoes(HashTable* h, BinaryTree* bt){
        get_jogador(h);
     }
 
-    // if(strcmp(op, "MIN") == 0){
-    //     min_empresa(bt);
-    // }
+    if(strcmp(op, "MIN") == 0){
+        min_jogador(bt);
+    }
 
-    // if(strcmp(op, "MAX") == 0){
-    //     max_empresa(bt);
-    // }
+    if(strcmp(op, "MAX") == 0){
+        max_jogador(bt);
+    }
 
     // if(strcmp(op, "SORTED") == 0){
     //     sorted_empresas(bt);
@@ -187,6 +187,8 @@ int main(){
     // printf("\n");
 
     // hash_table_print(h, print_jogador);
+
+    // printf("\n");
 
     int m;
     scanf("%d\n", &m);
