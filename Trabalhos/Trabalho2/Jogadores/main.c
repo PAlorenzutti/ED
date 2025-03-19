@@ -22,9 +22,9 @@ void leitura_arquivo(HashTable *h, BinaryTree *bt)
         char *nome = (char *)malloc((MAX_NOME_LENGTH + 1) * sizeof(char));
         int disputadas, vencidas;
 
-        fscanf(file, "%s %s %d %d", nickname, nome, &disputadas, &vencidas);
+        fscanf(file, "%s %s %d %d", nickname, nome, &vencidas, &disputadas);
 
-        Jogador *jogador = jogador_construct(nickname, nome, disputadas, vencidas);
+        Jogador *jogador = jogador_construct(nickname, nome, vencidas, disputadas);
 
         free(nickname);
         free(nome);
@@ -78,7 +78,7 @@ void sorted_jogadores(BinaryTree* bt){
         KeyValPair* j = (KeyValPair*)vector_get(v, i);
         Jogador* jogador = (Jogador*)key_val_pair_get_val(j);
 
-        printf("%s %.2f\n", get_nickname_jogador(jogador), get_percentual_vitorias(jogador));
+        printf("%s %.2f\n", get_nickname_jogador(jogador), get_percentual_vitorias_jogador(jogador));
 
         key_val_pair_destroy(j);
     }
@@ -86,61 +86,102 @@ void sorted_jogadores(BinaryTree* bt){
     vector_destroy(v);
 }
 
-// void update_empresa(HashTable* h, BinaryTree* bt){
-//     char nickname[MAX_SIGLA_LENGTH];
-//     float novo_valor;
-//     scanf(" %31s %f", nickname, &novo_valor);
+void update_victories(HashTable* h, BinaryTree* bt){
+    char nickname[MAX_NICKNAME_LENGTH];
+    float novo_valor;
+    scanf(" %31s %f", nickname, &novo_valor);
 
-//     Jogador* jogador = (Jogador*)hash_table_get(h, nickname);
+    Jogador* jogador = (Jogador*)hash_table_get(h, nickname);
 
-//     if(jogador == NULL){
-//         printf("Jogador nao encontrada\n");
-//         return;
-//     }
+    if(jogador == NULL){
+        printf("Jogador nao encontrada\n");
+        return;
+    }
 
-//     binary_tree_remove(bt, jogador);
+    binary_tree_remove(bt, jogador);
 
-//     update_valor_unitario_empresa(jogador, novo_valor);
+    update_vitorias_jogador(jogador, novo_valor);
 
-//     binary_tree_add(bt, jogador, jogador);
-// }
+    binary_tree_add(bt, jogador, jogador);
+}
 
-// void remove_empresa(HashTable* h, BinaryTree* bt){
-//     char nickname[MAX_SIGLA_LENGTH];
-//     scanf(" %31s", nickname);
+void update_defeats(HashTable* h, BinaryTree* bt){
+    char nickname[MAX_NICKNAME_LENGTH];
+    float novo_valor;
+    scanf(" %31s %f", nickname, &novo_valor);
 
-//     Jogador* jogador = (Jogador*)hash_table_pop(h, nickname);
+    Jogador* jogador = (Jogador*)hash_table_get(h, nickname);
 
-//     if(jogador == NULL){
-//         printf("Jogador nao encontrada\n");
-//         return;
-//     }
+    if(jogador == NULL){
+        printf("Jogador nao encontrada\n");
+        return;
+    }
 
-//     binary_tree_remove(bt, jogador);
+    binary_tree_remove(bt, jogador);
 
-//     empresa_destroy(jogador);
-// }
+    update_derrotas_jogador(jogador, novo_valor);
 
-// void empresa_interval(BinaryTree* bt){
-//     float min, max;
-//     scanf(" %f %f", &min, &max);
+    binary_tree_add(bt, jogador, jogador);
+}
 
-//     Vector* v = binary_tree_inorder_traversal_recursive(bt);
+void remove_jogador(HashTable* h, BinaryTree* bt){
+    char nickname[MAX_NICKNAME_LENGTH];
+    scanf(" %31s", nickname);
 
-//     for(int i = 0; i < vector_size(v); i++){
-//         KeyValPair* pair = (KeyValPair*)vector_get(v,i);
-//         Jogador* jogador = (Jogador*)key_val_pair_get_val(pair);
-//         float val = get_valor_unitario_empresa(jogador);
+    Jogador* jogador = (Jogador*)hash_table_pop(h, nickname);
 
-//         if(val >= min && val <= max){
-//             printf("%s\n", get_sigla_empresa(jogador));
-//         }
+    if(jogador == NULL){
+        printf("Jogador nao encontrada\n");
+        return;
+    }
 
-//         key_val_pair_destroy(pair);
-//     }
+    binary_tree_remove(bt, jogador);
 
-//     vector_destroy(v);
-// }
+    jogador_destroy(jogador);
+}
+
+void interval_jogadores(BinaryTree* bt){
+    float min, max;
+    scanf(" %f %f", &min, &max);
+
+    Vector* v = binary_tree_inorder_traversal_recursive(bt);
+
+    for(int i = 0; i < vector_size(v); i++){
+        KeyValPair* pair = (KeyValPair*)vector_get(v,i);
+        Jogador* jogador = (Jogador*)key_val_pair_get_val(pair);
+
+        float val = get_percentual_vitorias_jogador(jogador);
+
+        if(val >= min && val <= max){
+            printf("%s\n", get_nickname_jogador(jogador));
+        }
+
+        key_val_pair_destroy(pair);
+    }
+
+    vector_destroy(v);
+}
+
+void match_jogador(HashTable* h, BinaryTree* bt) {
+    char nickname[MAX_NICKNAME_LENGTH];
+    scanf(" %31s", nickname);
+
+    Jogador* jogador = (Jogador*)hash_table_get(h, nickname);
+
+    if(jogador == NULL){
+        printf("Jogador nao encontrada\n");
+        return;
+    }
+
+    Jogador *proximo = (Jogador*)binary_tree_get_nearest(bt, jogador, diff_percentual_vitorias);
+
+    if(proximo == NULL){
+        printf("Nao ha jogadores suficientes\n");
+        return;
+    }
+    
+    printf("%s\n", get_nickname_jogador(proximo));
+}
 
 void operacoes(HashTable* h, BinaryTree* bt){
     char op[9];
@@ -162,17 +203,25 @@ void operacoes(HashTable* h, BinaryTree* bt){
         sorted_jogadores(bt);
     }
 
-    // if(strcmp(op, "UPDATE") == 0){
-    //     update_empresa(h, bt);
-    // }
+    if(strcmp(op, "VICTORIES") == 0){
+        update_victories(h, bt);
+    }
 
-    // if(strcmp(op, "RM") == 0){
-    //     remove_empresa(h, bt);
-    // }
+    if(strcmp(op, "DEFEATS") == 0){
+        update_defeats(h, bt);
+    }
 
-    // if(strcmp(op, "INTERVAL") == 0){
-    //     empresa_interval(bt);
-    // }
+    if(strcmp(op, "RM") == 0){
+        remove_jogador(h, bt);
+    }
+
+    if(strcmp(op, "INTERVAL") == 0){
+        interval_jogadores(bt);
+    }
+
+    if(strcmp(op, "MATCH") == 0){
+        match_jogador(h, bt);
+    }
 }
 
 int main(){
@@ -186,9 +235,11 @@ int main(){
 
     // printf("\n");
 
-    // hash_table_print(h, print_jogador);
+    printf("\nANTES:\n");
 
-    // printf("\n");
+    hash_table_print(h, print_jogador);
+
+    printf("\n");
 
     int m;
     scanf("%d\n", &m);
@@ -196,6 +247,12 @@ int main(){
     for(int i = 0; i<m; i++){
         operacoes(h, bt);
     }
+
+    // printf("\nDEPOIS:\n");
+
+    // hash_table_print(h, print_jogador);
+
+    // printf("\n");
 
     hash_table_destroy(h);
     binary_tree_destroy(bt);

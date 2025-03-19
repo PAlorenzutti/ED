@@ -17,6 +17,7 @@ typedef int (*CmpFn)(void *, void *); //
 typedef void (*KeyDestroyFn)(void *); //
 typedef void (*ValDestroyFn)(void *); //
 typedef void (*PrintFn)(void *); //
+typedef float (*DiffFn)(void *, void *); //
 
 typedef struct BinaryTree BinaryTree; //
 
@@ -41,6 +42,8 @@ KeyValPair *binary_tree_pop_max(BinaryTree *bt);
 Vector *binary_tree_interval(BinaryTree *bt, void *min_key, void *max_key);
 
 void *binary_tree_get(BinaryTree *bt, void *key);
+
+void *binary_tree_get_nearest(BinaryTree *bt, void *key, DiffFn diff_fn);
 
 void binary_tree_destroy(BinaryTree *bt);
 

@@ -13,7 +13,7 @@ struct Jogador{
     float percentual; //percentual de vitórias;
 };
 
-Jogador* jogador_construct(char *nickname, char* nome, int disputadas, int vencidas){
+Jogador* jogador_construct(char *nickname, char* nome, int vencidas, int disputadas){
     Jogador *j = (Jogador*)malloc(sizeof(Jogador));
 
     strncpy(j->nickname, nickname, MAX_NICKNAME_LENGTH);
@@ -38,8 +38,41 @@ char* get_nickname_jogador(Jogador* j){
     return j->nickname;
 }
 
-float get_percentual_vitorias(Jogador* j){
+float get_percentual_vitorias_jogador(Jogador* j){
     return j->percentual;
+}
+
+void update_vitorias_jogador(Jogador* j, int novo_valor){
+    j->vencidas = novo_valor;
+
+    if(j->disputadas == 0){
+        j->percentual = 0;
+    }else{
+        j->percentual = (float)j->vencidas / j->disputadas;
+    }
+}
+
+void update_derrotas_jogador(Jogador* j, int novo_valor){
+    j->disputadas = novo_valor;
+
+    if(j->disputadas == 0){
+        j->percentual = 0;
+    }else{
+        j->percentual = (float)j->vencidas / j->disputadas;
+    }
+}
+
+float diff_percentual_vitorias(void *jogador_1, void *jogador_2){
+    Jogador *j1 = (Jogador*)jogador_1;
+    Jogador *j2 = (Jogador*)jogador_2;
+
+    float diff = j1->percentual - j2->percentual;
+
+    if(diff < 0){
+        diff = -diff;
+    }
+
+    return diff;
 }
 
 int compara_string(void *key1, void *key2) {
@@ -87,7 +120,7 @@ void print_jogador(void *j){
     Jogador *jogador = (Jogador*) j;
 
     printf("%s %s %d %d\n", jogador->nickname, jogador->nome, jogador->disputadas, jogador->vencidas);
-    // printf("Percentual de vitorias: %.2f\n", jogador->percentual);
+    printf("Percentual de vitorias: %.2f\n", jogador->percentual);
 }
 
 void jogador_destroy(void* j){
