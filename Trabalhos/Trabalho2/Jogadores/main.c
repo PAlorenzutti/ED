@@ -31,7 +31,7 @@ void leitura_arquivo(HashTable *h, BinaryTree *bt)
 
         hash_table_set(h, get_nickname_jogador(jogador), jogador);
 
-        binary_tree_add(bt, jogador, jogador);
+        binary_tree_add_recursive(bt, jogador, jogador);
     }
 
     fclose(file);
@@ -100,11 +100,11 @@ void update_victories(HashTable* h, BinaryTree* bt){
         return;
     }
 
-    binary_tree_remove(bt, jogador);
+    binary_tree_remove_recursive(bt, jogador);
 
     update_vitorias_jogador(jogador, novo_valor);
 
-    binary_tree_add(bt, jogador, jogador);
+    binary_tree_add_recursive(bt, jogador, jogador);
 }
 
 void update_defeats(HashTable* h, BinaryTree* bt){
@@ -119,11 +119,11 @@ void update_defeats(HashTable* h, BinaryTree* bt){
         return;
     }
 
-    binary_tree_remove(bt, jogador);
+    binary_tree_remove_recursive(bt, jogador);
 
     update_derrotas_jogador(jogador, novo_valor);
 
-    binary_tree_add(bt, jogador, jogador);
+    binary_tree_add_recursive(bt, jogador, jogador);
 }
 
 void remove_jogador(HashTable* h, BinaryTree* bt){
@@ -137,7 +137,7 @@ void remove_jogador(HashTable* h, BinaryTree* bt){
         return;
     }
 
-    binary_tree_remove(bt, jogador);
+    binary_tree_remove_recursive(bt, jogador);
 
     jogador_destroy(jogador);
 }
@@ -181,7 +181,7 @@ void match_jogador(HashTable* h, BinaryTree* bt) {
         printf("Nao ha jogadores suficientes\n");
         return;
     }
-    
+
     printf("%s\n", get_nickname_jogador(proximo));
 }
 

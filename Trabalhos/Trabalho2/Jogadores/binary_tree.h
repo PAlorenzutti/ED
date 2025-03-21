@@ -31,6 +31,8 @@ int binary_tree_empty(BinaryTree *bt); //
 
 void binary_tree_remove(BinaryTree *bt, void *key);
 
+void binary_tree_remove_recursive(BinaryTree *bt, void *key);
+
 void *binary_tree_min(BinaryTree *bt);
 
 void *binary_tree_max(BinaryTree *bt);

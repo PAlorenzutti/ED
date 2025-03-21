@@ -70,7 +70,7 @@ float diff_percentual_vitorias(void *jogador_1, void *jogador_2){
     float diff = j1->percentual - j2->percentual;
 
     if(diff < 0){
-        diff = -diff;
+        diff = (-1.0) * diff;
     }
 
     return diff;
