@@ -90,8 +90,8 @@ void sorted_jogadores(BinaryTree* bt){
 
 void update_victories(HashTable* h, BinaryTree* bt){
     char nickname[MAX_NICKNAME_LENGTH];
-    float novo_valor;
-    scanf(" %31s %f", nickname, &novo_valor);
+    double novo_valor;
+    scanf(" %31s %lf", nickname, &novo_valor);
 
     Jogador* jogador = (Jogador*)hash_table_get(h, nickname);
 
@@ -109,8 +109,8 @@ void update_victories(HashTable* h, BinaryTree* bt){
 
 void update_defeats(HashTable* h, BinaryTree* bt){
     char nickname[MAX_NICKNAME_LENGTH];
-    float novo_valor;
-    scanf(" %31s %f", nickname, &novo_valor);
+    double novo_valor;
+    scanf(" %31s %lf", nickname, &novo_valor);
 
     Jogador* jogador = (Jogador*)hash_table_get(h, nickname);
 
@@ -143,8 +143,8 @@ void remove_jogador(HashTable* h, BinaryTree* bt){
 }
 
 void interval_jogadores(BinaryTree* bt){
-    float min, max;
-    scanf(" %f %f", &min, &max);
+    double min, max;
+    scanf(" %lf %lf", &min, &max);
 
     Vector* v = binary_tree_inorder_traversal_recursive(bt);
 
@@ -152,7 +152,7 @@ void interval_jogadores(BinaryTree* bt){
         KeyValPair* pair = (KeyValPair*)vector_get(v,i);
         Jogador* jogador = (Jogador*)key_val_pair_get_val(pair);
 
-        float val = get_percentual_vitorias_jogador(jogador);
+        double val = get_percentual_vitorias_jogador(jogador);
 
         if(val >= min && val <= max){
             printf("%s\n", get_nickname_jogador(jogador));

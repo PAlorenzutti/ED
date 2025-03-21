@@ -1,7 +1,9 @@
 #include "jogador.h"
+#include "binary_tree.h"
 
 
 #include <stdio.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -10,7 +12,7 @@ struct Jogador{
     char nome[MAX_NOME_LENGTH];
     int disputadas; //partidas disputadas;
     int vencidas;   //partidas vencidas;
-    float percentual; //percentual de vitórias;
+    double percentual; //percentual de vitórias;
 };
 
 Jogador* jogador_construct(char *nickname, char* nome, int vencidas, int disputadas){
@@ -28,7 +30,7 @@ Jogador* jogador_construct(char *nickname, char* nome, int vencidas, int disputa
     if(j->disputadas == 0){
         j->percentual = 0;
     }else{
-        j->percentual = (float)j->vencidas / j->disputadas;
+        j->percentual = (double)j->vencidas / j->disputadas;
     }
 
     return j;
@@ -38,7 +40,7 @@ char* get_nickname_jogador(Jogador* j){
     return j->nickname;
 }
 
-float get_percentual_vitorias_jogador(Jogador* j){
+double get_percentual_vitorias_jogador(Jogador* j){
     return j->percentual;
 }
 
@@ -49,7 +51,7 @@ void update_vitorias_jogador(Jogador* j, int novo_valor){
     if(j->disputadas == 0){
         j->percentual = 0;
     }else{
-        j->percentual = (float)j->vencidas / j->disputadas;
+        j->percentual = (double)j->vencidas / j->disputadas;
     }
 }
 
@@ -59,19 +61,15 @@ void update_derrotas_jogador(Jogador* j, int novo_valor){
     if(j->disputadas == 0){
         j->percentual = 0;
     }else{
-        j->percentual = (float)j->vencidas / j->disputadas;
+        j->percentual = (double)j->vencidas / j->disputadas;
     }
 }
 
-float diff_percentual_vitorias(void *jogador_1, void *jogador_2){
+double diff_percentual_vitorias(void *jogador_1, void *jogador_2){
     Jogador *j1 = (Jogador*)jogador_1;
     Jogador *j2 = (Jogador*)jogador_2;
 
-    float diff = j1->percentual - j2->percentual;
-
-    if(diff < 0){
-        diff = (-1.0) * diff;
-    }
+    double diff = fabsf(j1->percentual - j2->percentual);
 
     return diff;
 }

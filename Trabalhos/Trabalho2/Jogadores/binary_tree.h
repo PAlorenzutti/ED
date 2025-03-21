@@ -17,7 +17,7 @@ typedef int (*CmpFn)(void *, void *); //
 typedef void (*KeyDestroyFn)(void *); //
 typedef void (*ValDestroyFn)(void *); //
 typedef void (*PrintFn)(void *); //
-typedef float (*DiffFn)(void *, void *); //
+typedef double (*DiffFn)(void *, void *); //
 
 typedef struct BinaryTree BinaryTree; //
 

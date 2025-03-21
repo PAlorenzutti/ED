@@ -12,13 +12,13 @@ Jogador* jogador_construct(char *nickname, char* nome, int disputadas, int venci
 
 char* get_nickname_jogador(Jogador* j);
 
-float get_percentual_vitorias_jogador(Jogador* j);
+double get_percentual_vitorias_jogador(Jogador* j);
 
 void update_vitorias_jogador(Jogador* j, int novo_valor);
 
 void update_derrotas_jogador(Jogador* j, int novo_valor);
 
-float diff_percentual_vitorias(void *jogador_1, void *jogador_2);
+double diff_percentual_vitorias(void *jogador_1, void *jogador_2);
 
 int hash_jogador(HashTable *h, void *key);
 

@@ -180,7 +180,7 @@ void *binary_tree_get_nearest(BinaryTree *bt, void *key, DiffFn diff_fn) {
 
     Vector *v = binary_tree_inorder_traversal_recursive(bt);
     void *nearest_val = NULL;
-    float min_diff = 1.0;
+    double min_diff = 1.0;
 
     for (int i = 0; i < vector_size(v); i++) {
         KeyValPair *pair = (KeyValPair *)vector_get(v, i);
@@ -193,7 +193,7 @@ void *binary_tree_get_nearest(BinaryTree *bt, void *key, DiffFn diff_fn) {
             continue;
         }
 
-        float current_diff = diff_fn(key, current_key);
+        double current_diff = diff_fn(key, current_key);
 
         // Atualiza o mais próximo apenas se for a primeira iteração ou encontrar diferença menor
         if (nearest_val == NULL || current_diff < min_diff || 
