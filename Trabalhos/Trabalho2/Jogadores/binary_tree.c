@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
 
 struct Node {
     void *key; 
@@ -173,40 +174,39 @@ void *binary_tree_get(BinaryTree *bt, void *key) {
     return NULL;
 }
 
-void *binary_tree_get_nearest(BinaryTree *bt, void *key, DiffFn diff_fn) {
-    if (bt == NULL || bt->root == NULL) {
+Node *find_nearest_recursive(Node *current, void *key, DiffFn diffFn, CmpFn cmp_fn, double *minDiff, Node *nearest)
+{
+    if (current == NULL || current->val == NULL || current->key == NULL)
+        return nearest;
+
+    nearest = find_nearest_recursive(current->left, key, diffFn, cmp_fn, minDiff, nearest);
+
+    if (current != NULL && cmp_fn(key, current->key) != 0){
+        double diff = diffFn(key, current->key);
+
+        if (diff < *minDiff){
+            *minDiff = diff;
+            nearest = current;
+        }
+    }
+
+    nearest = find_nearest_recursive(current->right, key, diffFn, cmp_fn, minDiff, nearest);
+
+    return nearest;
+}
+
+void *binary_tree_get_nearest(BinaryTree *bt, void *key, DiffFn diffFn)
+{
+    if (!bt || !bt->root){
         return NULL;
     }
 
-    Vector *v = binary_tree_inorder_traversal_recursive(bt);
-    void *nearest_val = NULL;
-    double min_diff = 1.0;
+    //inicia com a maior diferença possível;
+    double minDiff = 1.0;
 
-    for (int i = 0; i < vector_size(v); i++) {
-        KeyValPair *pair = (KeyValPair *)vector_get(v, i);
-        void *current_key = key_val_pair_get_key(pair);
-        void *current_val = key_val_pair_get_val(pair);
+    Node *nearest = find_nearest_recursive(bt->root, key, diffFn, bt->cmp_fn, &minDiff, NULL);
 
-        // Ignora o nó com a mesma chave (jogador atual)
-        if (bt->cmp_fn(key, current_key) == 0) {
-            key_val_pair_destroy(pair);
-            continue;
-        }
-
-        double current_diff = diff_fn(key, current_key);
-
-        // Atualiza o mais próximo apenas se for a primeira iteração ou encontrar diferença menor
-        if (nearest_val == NULL || current_diff < min_diff || 
-            (current_diff == min_diff && bt->cmp_fn(current_key, key) < 0)) {
-            min_diff = current_diff;
-            nearest_val = current_val;
-        }
-
-        key_val_pair_destroy(pair);
-    }
-
-    vector_destroy(v);
-    return nearest_val;
+    return nearest ? nearest->val : NULL;
 }
 
 Node *find_min(Node *node) {
