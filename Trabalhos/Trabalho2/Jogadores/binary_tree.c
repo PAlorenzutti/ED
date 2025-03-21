@@ -113,6 +113,26 @@ void binary_tree_add(BinaryTree *bt, void *key, void *value) {
     }
 }
 
+Node *binary_tree_add_recursive_helper(Node *node, void *key, void *value, CmpFn cmp_fn) {
+    if (node == NULL) {
+        return treenode_construct(key, value);
+    }
+    
+    int cmp = cmp_fn(key, node->key);
+    if (cmp < 0) {
+        node->left = binary_tree_add_recursive_helper(node->left, key, value, cmp_fn);
+    } else if (cmp > 0) {
+        node->right = binary_tree_add_recursive_helper(node->right, key, value, cmp_fn);
+    } else {
+        node->val = value;
+    }
+    return node;
+}
+
+void binary_tree_add_recursive(BinaryTree *bt, void *key, void *value) {
+    bt->root = binary_tree_add_recursive_helper(bt->root, key, value, bt->cmp_fn);
+}
+
 void *get_recursive(Node *node, void *key, CmpFn cmp_fn) {
     if (node == NULL) {
         return NULL;
@@ -160,7 +180,7 @@ void *binary_tree_get_nearest(BinaryTree *bt, void *key, DiffFn diff_fn) {
 
     Vector *v = binary_tree_inorder_traversal_recursive(bt);
     void *nearest_val = NULL;
-    float min_diff = -1;
+    float min_diff = 1.0;
 
     for (int i = 0; i < vector_size(v); i++) {
         KeyValPair *pair = (KeyValPair *)vector_get(v, i);
@@ -211,6 +231,43 @@ Node *find_max(Node *node) {
     }
 
     return node;
+}
+
+Node *binary_tree_remove_recursive_helper(Node *node, void *key, CmpFn cmp_fn, KeyDestroyFn key_destroy_fn, ValDestroyFn val_destroy_fn) {
+    if (node == NULL) return NULL;
+    
+    int cmp = cmp_fn(key, node->key);
+    if (cmp < 0) {
+        node->left = binary_tree_remove_recursive_helper(node->left, key, cmp_fn, key_destroy_fn, val_destroy_fn);
+    } else if (cmp > 0) {
+        node->right = binary_tree_remove_recursive_helper(node->right, key, cmp_fn, key_destroy_fn, val_destroy_fn);
+    } else {
+        if (node->left == NULL) {
+            Node *right = node->right;
+            // treenode_destroy(node, key_destroy_fn, val_destroy_fn);
+            free(node);
+            return right;
+        } else if (node->right == NULL) {
+            Node *left = node->left;
+            // treenode_destroy(node, key_destroy_fn, val_destroy_fn);
+            free(node);
+            return left;
+        }
+        
+        Node *minNode = node->right;
+        while (minNode->left != NULL) {
+            minNode = minNode->left;
+        }
+        
+        node->key = minNode->key;
+        node->val = minNode->val;
+        node->right = binary_tree_remove_recursive_helper(node->right, minNode->key, cmp_fn, key_destroy_fn, val_destroy_fn);
+    }
+    return node;
+}
+
+void binary_tree_remove_recursive(BinaryTree *bt, void *key) {
+    bt->root = binary_tree_remove_recursive_helper(bt->root, key, bt->cmp_fn, bt->key_destroy_fn, bt->val_destroy_fn);
 }
 
 void binary_tree_remove(BinaryTree *bt, void *key) {
