@@ -1,0 +1,42 @@
+-81876
+-80210
+-75804
+-73850
+-72243
+-71068
+-66939
+-65266
+-64282
+-62792
+-62780
+-60800
+-58094
+-55924
+-53105
+-50004
+-49982
+-48310
+-42444
+-41557
+-38995
+-34682
+-34323
+-33821
+-28487
+-19212
+-14018
+-12359
+-4502
+-2246
+-1979
+3278
+5547
+8==464== 
+==464== HEAP SUMMARY:
+==464==     in use at exit: 0 bytes in 0 blocks
+==464==   total heap usage: 76 allocs, 76 frees, 10,068 bytes allocated
+==464== 
+==464== All heap blocks were freed -- no leaks are possible
+==464== 
+==464== For lists of detected and suppressed errors, rerun with: -s
+==464== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

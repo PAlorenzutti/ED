@@ -1,0 +1,39 @@
+-95805
+-93599
+-91793
+-89880
+-85624
+-84276
+-68101
+-66757
+-63553
+-57470
+-47054
+-44910
+-38774
+-37558
+-35158
+-34791
+-24959
+-23230
+-20401
+-19126
+-11807
+-11152
+-2412
+-2399
+-2248
+-1897
+2505
+ info
+==458== Command: ./../main
+==458== 
+==458== 
+==458== HEAP SUMMARY:
+==458==     in use at exit: 0 bytes in 0 blocks
+==458==   total heap usage: 66 allocs, 66 frees, 9,888 bytes allocated
+==458== 
+==458== All heap blocks were freed -- no leaks are possible
+==458== 
+==458== For lists of detected and suppressed errors, rerun with: -s
+==458== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

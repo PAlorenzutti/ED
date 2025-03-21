@@ -1,0 +1,35 @@
+-10085
+2970
+4233
+8140
+11199
+13662
+13745
+19412
+19749
+24628
+25898
+26481
+27500
+29337
+30136
+48727
+54182
+67158
+67702
+67883
+78906
+79564
+81280
+-3.22.0 and LibVEX; rerun with -h for copyright info
+==440== Command: ./../main
+==440== 
+==440== 
+==440== HEAP SUMMARY:
+==440==     in use at exit: 0 bytes in 0 blocks
+==440==   total heap usage: 53 allocs, 53 frees, 9,484 bytes allocated
+==440== 
+==440== All heap blocks were freed -- no leaks are possible
+==440== 
+==440== For lists of detected and suppressed errors, rerun with: -s
+==440== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

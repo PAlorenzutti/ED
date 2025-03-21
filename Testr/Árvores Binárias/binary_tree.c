@@ -269,6 +269,7 @@ void binary_tree_remove(BinaryTree *bt, void *key) {
         } else {
             sucessor_parent->left = sucessor->right;
         }
+        
         free(sucessor);
     
         // Destrói os valores antigos do nó atual
@@ -299,7 +300,7 @@ KeyValPair *binary_tree_pop_min(BinaryTree *bt){
     pair->value = current->val;
 
     if (parent == NULL){
-      
+
         bt->root = current->right; 
     }
     else{
@@ -346,7 +347,7 @@ int binary_tree_empty(BinaryTree *bt) {
 
 Vector *binary_tree_levelorder_traversal(BinaryTree *bt) {
     if (bt == NULL || bt->root == NULL) {
-        return vector_construct(); // Retorna vetor vazio se a árvore for nula/vazia
+        return NULL; // Retorna vetor vazio se a árvore for nula/vazia
     }
 
     Vector *output = vector_construct(); // Vetor de KeyValPair

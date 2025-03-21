@@ -153,6 +153,42 @@ void *binary_tree_get(BinaryTree *bt, void *key) {
     return NULL;
 }
 
+void *binary_tree_get_nearest(BinaryTree *bt, void *key, DiffFn diff_fn) {
+    if (bt == NULL || bt->root == NULL) {
+        return NULL;
+    }
+
+    Vector *v = binary_tree_inorder_traversal_recursive(bt);
+    void *nearest_val = NULL;
+    float min_diff = -1;
+
+    for (int i = 0; i < vector_size(v); i++) {
+        KeyValPair *pair = (KeyValPair *)vector_get(v, i);
+        void *current_key = key_val_pair_get_key(pair);
+        void *current_val = key_val_pair_get_val(pair);
+
+        // Ignora o nó com a mesma chave (jogador atual)
+        if (bt->cmp_fn(key, current_key) == 0) {
+            key_val_pair_destroy(pair);
+            continue;
+        }
+
+        float current_diff = diff_fn(key, current_key);
+
+        // Atualiza o mais próximo apenas se for a primeira iteração ou encontrar diferença menor
+        if (nearest_val == NULL || current_diff < min_diff || 
+            (current_diff == min_diff && bt->cmp_fn(current_key, key) < 0)) {
+            min_diff = current_diff;
+            nearest_val = current_val;
+        }
+
+        key_val_pair_destroy(pair);
+    }
+
+    vector_destroy(v);
+    return nearest_val;
+}
+
 Node *find_min(Node *node) {
     if (node == NULL) {
         return NULL;

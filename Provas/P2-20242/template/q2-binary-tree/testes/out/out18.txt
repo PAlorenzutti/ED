@@ -1,0 +1,30 @@
+-43084
+-41852
+-41253
+-40537
+-39942
+-33412
+-31638
+-30224
+-28908
+-28147
+-24079
+-23634
+-20136
+-14084
+-7443
+-6151
+-5074
+-1104
+Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==434== Command: ./../main
+==434== 
+==434== 
+==434== HEAP SUMMARY:
+==434==     in use at exit: 0 bytes in 0 blocks
+==434==   total heap usage: 85 allocs, 85 frees, 10,464 bytes allocated
+==434== 
+==434== All heap blocks were freed -- no leaks are possible
+==434== 
+==434== For lists of detected and suppressed errors, rerun with: -s
+==434== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

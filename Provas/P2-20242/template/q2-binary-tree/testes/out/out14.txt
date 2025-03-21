@@ -1,0 +1,34 @@
+-72710
+-68879
+-65208
+-61468
+-61444
+-57223
+-56258
+-55232
+-53551
+-51804
+-46736
+-46210
+-45347
+-44738
+-43642
+-43322
+-39290
+-38305
+-30773
+-29765
+-29272
+-27627
+; rerun with -h for copyright info
+==424== Command: ./../main
+==424== 
+==424== 
+==424== HEAP SUMMARY:
+==424==     in use at exit: 0 bytes in 0 blocks
+==424==   total heap usage: 103 allocs, 103 frees, 10,820 bytes allocated
+==424== 
+==424== All heap blocks were freed -- no leaks are possible
+==424== 
+==424== For lists of detected and suppressed errors, rerun with: -s
+==424== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

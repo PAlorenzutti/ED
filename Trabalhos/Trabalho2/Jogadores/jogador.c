@@ -43,7 +43,8 @@ float get_percentual_vitorias_jogador(Jogador* j){
 }
 
 void update_vitorias_jogador(Jogador* j, int novo_valor){
-    j->vencidas = novo_valor;
+    j->vencidas += novo_valor;
+    j->disputadas += novo_valor;
 
     if(j->disputadas == 0){
         j->percentual = 0;
@@ -53,7 +54,7 @@ void update_vitorias_jogador(Jogador* j, int novo_valor){
 }
 
 void update_derrotas_jogador(Jogador* j, int novo_valor){
-    j->disputadas = novo_valor;
+    j->disputadas += novo_valor;
 
     if(j->disputadas == 0){
         j->percentual = 0;
@@ -119,8 +120,8 @@ int compara_jogadores(void *jogador_1, void *jogador_2) {
 void print_jogador(void *j){
     Jogador *jogador = (Jogador*) j;
 
-    printf("%s %s %d %d\n", jogador->nickname, jogador->nome, jogador->disputadas, jogador->vencidas);
-    printf("Percentual de vitorias: %.2f\n", jogador->percentual);
+    printf("%s %s %d %d\n", jogador->nickname, jogador->nome, jogador->vencidas, jogador->disputadas);
+    // printf("Percentual de vitorias: %.2f\n", jogador->percentual);
 }
 
 void jogador_destroy(void* j){

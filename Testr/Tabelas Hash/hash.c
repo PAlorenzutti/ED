@@ -195,25 +195,30 @@ HashTableIterator *hash_table_iterator(HashTable *h) {
 }
 
 int hash_table_iterator_is_over(HashTableIterator *it) {
-    return (it->current_element >= it->total_elements);
+    return (it->current_element >= it->total_elements || it->current_bucket >= it->table_size);
 }
 
 HashTableItem *hash_table_iterator_next(HashTableIterator *it) {
-    if (it->current_element >= it->total_elements) {
+    if (hash_table_iterator_is_over(it)) {
         return NULL; // Todos os elementos já foram percorridos
     }
 
-    while (it->current_bucket < it->table_size) {
-        // Encontra o próximo balde não vazio
+    while (!hash_table_iterator_is_over(it)) {
+        // pro caso do nó atual ser nulo também
         if (it->current_node == NULL) {
             ForwardList *bucket = it->buckets[it->current_bucket];
+            
+            //pro caso do balde atual ser nulo também
             while (bucket == NULL || bucket->head == NULL) {
                 it->current_bucket++;
-                if (it->current_bucket >= it->table_size) {
+
+                if (hash_table_iterator_is_over(it)) {
                     return NULL; // Fim da tabela
                 }
+
                 bucket = it->buckets[it->current_bucket];
             }
+
             it->current_node = bucket->head;
         }
 

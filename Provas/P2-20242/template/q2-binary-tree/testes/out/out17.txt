@@ -1,0 +1,42 @@
+-69175
+-68906
+-59026
+-57388
+-54764
+-49596
+-47997
+-46534
+-46384
+-46252
+-45878
+-43893
+-43377
+-42390
+-34822
+-31940
+-31828
+-31370
+-23807
+-19115
+-7088
+-6459
+-5998
+-5425
+-4990
+-4365
+-3280
+1738
+9793
+10854
+11295
+: ./../main
+==432== 
+==432== 
+==432== HEAP SUMMARY:
+==432==     in use at exit: 0 bytes in 0 blocks
+==432==   total heap usage: 70 allocs, 70 frees, 9,928 bytes allocated
+==432== 
+==432== All heap blocks were freed -- no leaks are possible
+==432== 
+==432== For lists of detected and suppressed errors, rerun with: -s
+==432== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

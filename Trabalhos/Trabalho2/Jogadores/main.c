@@ -54,6 +54,8 @@ void get_jogador(HashTable *h)
 void min_jogador(BinaryTree* bt){
     Jogador* jogador = (Jogador*)binary_tree_min(bt);
 
+    // binary_tree_print(bt, print_jogador);
+
     if(jogador == NULL){
         printf("Jogador nao encontrado\n");
     }else{
@@ -184,8 +186,8 @@ void match_jogador(HashTable* h, BinaryTree* bt) {
 }
 
 void operacoes(HashTable* h, BinaryTree* bt){
-    char op[9];
-    scanf("%8s", op);
+    char op[10];
+    scanf("%9s", op);
 
     if(strcmp(op, "GET") == 0){
        get_jogador(h);
@@ -235,11 +237,11 @@ int main(){
 
     // printf("\n");
 
-    printf("\nANTES:\n");
+    // printf("\nANTES:\n");
 
-    hash_table_print(h, print_jogador);
+    // hash_table_print(h, print_jogador);
 
-    printf("\n");
+    // printf("\n");
 
     int m;
     scanf("%d\n", &m);
